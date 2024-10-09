@@ -32,7 +32,7 @@ const axesHelper = new THREE.AxesHelper( 2 );
 scene.add( axesHelper );
 
 // Variables pour contrôler la vitesse de rotation du cube
-const rotationAngle = Math.PI / 2; // 90 degrés
+const rotationAngle = Math.PI / 2; // 45 degrés
 const framePerRotation = 30;
 const rotationPerFrame = rotationAngle / framePerRotation; // 30 frames pour une rotation complète
 let targetRotation = 0; // Angle de rotation restant
@@ -45,14 +45,9 @@ let isRotating = false; // État de la rotation
 let isCubeRotating = false;
 let isSliceRotating = false;
 
-function getAdjustmentRotation() {
-  return rotationAngle - (rotationPerFrame * framePerRotation)
-}
-
 function rotateUntilOtherSide(axis) {
   groupToRotate = rubiksCube;
   targetRotation += rotationAngle; // Définit la rotation cible
-  restingRotation = getAdjustmentRotation();
   isRotating = true; // Démarre la rotation
   isCubeRotating = true;
   isSliceRotating = false;
@@ -66,24 +61,9 @@ function rotateSliceUntilOtherSide(slice, axis) {
 
   rotationAxis.copy(axis); // Stocker l'axe de rotation
   targetRotation += rotationAngle; // Définit la rotation cible
-  restingRotation = getAdjustmentRotation();
-
-  console.log('rotationPerFrame', rotationPerFrame,'restingRotation', restingRotation)
 
   isSliceRotating = true;
   isRotating = true; // Démarre la rotation
-  
-  // Créer un groupe temporaire pour la tranche
-  tempGroup = new THREE.Group();
-
-  // Retirer les cubies de la tranche de leur groupe parent (rubiksCube) et les ajouter au groupe temporaire
-  listCubies.forEach(cubie => {
-    rubiksCube.remove(cubie);  // Retirer du groupe parent
-    tempGroup.add(cubie);      // Ajouter au groupe temporaire
-  });
-
-  // Ajouter le groupe temporaire à la scène pour la rotation
-  scene.add(tempGroup);
 }
 
 // Ajouter un écouteur d'événements pour capturer les touches du clavier
@@ -136,25 +116,18 @@ function animate(time) {
       rubiksCube.rotateOnWorldAxis(rotationAxis, rotationPerFrame);
       targetRotation -= rotationPerFrame; 
     } else if (isSliceRotating) {
-      tempGroup.rotateOnWorldAxis(rotationAxis, rotationPerFrame);
+      listCubies.forEach((cube) => {
+        cube.position.applyAxisAngle(rotationAxis, rotationPerFrame);
+        cube.rotateOnWorldAxis(rotationAxis, rotationPerFrame);
+      })
       targetRotation -= rotationPerFrame;     
     }
 
     
     if (targetRotation < 0) {
 
-      if (isCubeRotating) {
-        rubiksCube.rotateOnWorldAxis(rotationAxis, restingRotation);
-      } else if (isSliceRotating) {
-        tempGroup.rotateOnWorldAxis(rotationAxis, restingRotation);
-
-        listCubies.forEach((cubie) => {
-          // cubie.applyMatrix4(tempGroup.matrixWorld);
-          // cubie.matrix.identity();
-          rubiksCube.add(cubie);
-        });
-
-        scene.remove(tempGroup);
+      if (isSliceRotating) {
+        listCubies = [];
       }
 
       isRotating = false;
@@ -173,13 +146,14 @@ const logVector = new THREE.Vector3();
 
 let temporaryGroup;
 function getAllCubeWhoAreBetween({x,y,z}) {
+  
   const result = [];
   rubiksCube.children.forEach((cube) => {
-    const worldPosition = cube.getWorldPosition(logVector);
+    const position = cube.position;
 
-    const isOkX = x ? x - 0.1 < worldPosition.x && worldPosition.x < x + 0.1 : false;
-    const isOkY = y ? y - 0.1 < worldPosition.y && worldPosition.y < y + 0.1 : false;
-    const isOkZ = z ? z - 0.1 < worldPosition.z && worldPosition.z < z + 0.1 : false;
+    const isOkX = x !== undefined ? x - 0.1 < position.x && position.x < x + 0.1 : false;
+    const isOkY = y !== undefined ? y - 0.1 < position.y && position.y < y + 0.1 : false;
+    const isOkZ = z !== undefined ? z - 0.1 < position.z && position.z < z + 0.1 : false;
 
     if(isOkX || isOkY || isOkZ) {
       result.push(cube);
