@@ -36,11 +36,9 @@ const rotationAngle = Math.PI / 2; // 45 degrés
 const framePerRotation = 30;
 const rotationPerFrame = rotationAngle / framePerRotation; // 30 frames pour une rotation complète
 let targetRotation = 0; // Angle de rotation restant
-let restingRotation = 0;
 
 let rotationAxis = new THREE.Vector3(); // Axe de rotation stocké
 
-let groupToRotate;
 let isRotating = false; // État de la rotation
 let isCubeRotating = false;
 let isSliceRotating = false;
@@ -55,7 +53,6 @@ function rotateUntilOtherSide(axis) {
 }
 
 let listCubies;
-let tempGroup;
 function rotateSliceUntilOtherSide(slice, axis) {
   listCubies = getAllCubeWhoAreBetween(slice);
 
@@ -111,7 +108,6 @@ camera.lookAt(0, 0, 0);
 
 function animate(time) {
   if (isRotating) {
-
     if (isCubeRotating) {
       rubiksCube.rotateOnWorldAxis(rotationAxis, rotationPerFrame);
       targetRotation -= rotationPerFrame; 
@@ -123,9 +119,7 @@ function animate(time) {
       targetRotation -= rotationPerFrame;     
     }
 
-    
     if (targetRotation < 0) {
-
       if (isSliceRotating) {
         listCubies = [];
       }
@@ -141,12 +135,7 @@ function animate(time) {
   renderer.render(scene, camera);
 }
 
-
-const logVector = new THREE.Vector3();
-
-let temporaryGroup;
 function getAllCubeWhoAreBetween({x,y,z}) {
-  
   const result = [];
   rubiksCube.children.forEach((cube) => {
     const position = cube.position;
