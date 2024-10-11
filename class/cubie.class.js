@@ -28,12 +28,12 @@ export default class Cubie {
     static cubeSize = 1;
 
     materials = [
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff0000') }),  // Rouge (avant)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff8c00') }),  // Orange (arrière)
+        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff00ff') }),  // Magenta vif (avant)
+        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff4500') }),  // Orange vif (arrière)
         new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ffffff') }),  // Blanc (haut)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ffff00') }),  // Jaune (bas)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#0000ff') }),  // Bleu (droite)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#00ff00') })   // Vert (gauche)
+        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#39ff14') }),  // Vert néon (bas)
+        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#007fff') }),  // Bleu électrique (droite)
+        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#f9ff00') })   // Jaune fluo (gauche)
     ];
 
     constructor(x,y,z) {
