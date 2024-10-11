@@ -37,7 +37,7 @@ export default class RubiksCube {
     listCubies = [];  
     rotateSliceUntilOtherSide(slice, axis) {
         this.listCubies = this.getAllCubeWhoAreBetween(slice);
-        this.rotationAxis.copy(axis); // Stocker l'axe de rotation
+        this.rotationAxis.copy(axis);
         this.isCubeRotating = false;
         this.isSliceRotating = true;
     }
@@ -51,7 +51,7 @@ export default class RubiksCube {
           const isOkY = y !== undefined ? y - 0.1 < position.y && position.y < y + 0.1 : false;
           const isOkZ = z !== undefined ? z - 0.1 < position.z && position.z < z + 0.1 : false;
       
-          if(isOkX || isOkY || isOkZ) {
+          if (isOkX || isOkY || isOkZ) {
             result.push(cube);
           }
         })

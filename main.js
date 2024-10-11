@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import RubiksCube from './class/rubiksCube.class.js';
+import { allRubiksMovement, allSliceMovement } from './rotation.js';
 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -20,58 +21,22 @@ const axesHelper = new THREE.AxesHelper( 2 );
 scene.add( axesHelper );
 
 // Ajouter un écouteur d'événements pour capturer les touches du clavier
+const rotationVector = new THREE.Vector3();
 window.addEventListener('keydown', (event) => {
   if (!(rubiks.isCubeRotating || rubiks.isSliceRotating)) {
-    switch (event.key) {
-      case 'ArrowRight':
-        rubiks.rotateUntilOtherSide(new THREE.Vector3(0, 0, 1));
-        break;
-      case 'ArrowLeft':
-        rubiks.rotateUntilOtherSide(new THREE.Vector3(0, 0, -1));
-        break;
-      case 'ArrowUp':
-        rubiks.rotateUntilOtherSide(new THREE.Vector3(0, -1, 0));
-        break;
-      case 'ArrowDown':
-        rubiks.rotateUntilOtherSide(new THREE.Vector3(0, 1, 0));
-        break;
-      case 'A':
-        rubiks.rotateSliceUntilOtherSide({z:1}, new THREE.Vector3(0, 0, 1));
-        break;
-      case 'E':
-        rubiks.rotateSliceUntilOtherSide({z:1}, new THREE.Vector3(0, 0, -1));
-        break;
-      case 'Q':
-        rubiks.rotateSliceUntilOtherSide({z:0}, new THREE.Vector3(0, 0, 1));
-        break;
-      case 'D':
-        rubiks.rotateSliceUntilOtherSide({z:0}, new THREE.Vector3(0, 0, -1));
-        break;
-      case 'W':
-        rubiks.rotateSliceUntilOtherSide({z:-1}, new THREE.Vector3(0, 0, 1));
-        break;
-      case 'C':
-        rubiks.rotateSliceUntilOtherSide({z:-1}, new THREE.Vector3(0, 0, -1));
-        break;
-      case 'R':
-        rubiks.rotateSliceUntilOtherSide({y:-1}, new THREE.Vector3(0, -1, 0));
-        break;
-      case 'T':
-        rubiks.rotateSliceUntilOtherSide({y:0}, new THREE.Vector3(0, -1, 0));
-        break;
-      case 'Y':
-        rubiks.rotateSliceUntilOtherSide({y:1}, new THREE.Vector3(0, -1, 0));
-        break;
-      case 'V':
-        rubiks.rotateSliceUntilOtherSide({y:-1}, new THREE.Vector3(0, 1, 0));
-        break;
-      case 'B':
-        rubiks.rotateSliceUntilOtherSide({y:0}, new THREE.Vector3(0, 1, 0));
-        break;
-      case 'N':
-        rubiks.rotateSliceUntilOtherSide({y:1}, new THREE.Vector3(0, 1, 0));
-        break;
-    }
+    allRubiksMovement.forEach((move) => {
+      if(event.key === move.key) {
+        rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+        rubiks.rotateUntilOtherSide(rotationVector);
+      }
+    })
+
+    allSliceMovement.forEach((move) => {
+      if(event.key === move.key) {
+        rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+        rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
+      }
+    })
   }
 });
 
