@@ -14,7 +14,6 @@ const rubiks = new RubiksCube();
 renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera));
 rendererFrame.appendChild(renderer.domElement);
 
-
 scene.add(rubiks.group);
 
 const axesHelper = new THREE.AxesHelper( 2 );
@@ -22,7 +21,7 @@ scene.add( axesHelper );
 
 // Ajouter un écouteur d'événements pour capturer les touches du clavier
 window.addEventListener('keydown', (event) => {
-  if (!rubiks.isRotating) {
+  if (!(rubiks.isCubeRotating || rubiks.isSliceRotating)) {
     switch (event.key) {
       case 'ArrowRight':
         rubiks.rotateUntilOtherSide(new THREE.Vector3(0, 0, 1));
@@ -53,6 +52,24 @@ window.addEventListener('keydown', (event) => {
         break;
       case 'C':
         rubiks.rotateSliceUntilOtherSide({z:-1}, new THREE.Vector3(0, 0, -1));
+        break;
+      case 'R':
+        rubiks.rotateSliceUntilOtherSide({y:-1}, new THREE.Vector3(0, -1, 0));
+        break;
+      case 'T':
+        rubiks.rotateSliceUntilOtherSide({y:0}, new THREE.Vector3(0, -1, 0));
+        break;
+      case 'Y':
+        rubiks.rotateSliceUntilOtherSide({y:1}, new THREE.Vector3(0, -1, 0));
+        break;
+      case 'V':
+        rubiks.rotateSliceUntilOtherSide({y:-1}, new THREE.Vector3(0, 1, 0));
+        break;
+      case 'B':
+        rubiks.rotateSliceUntilOtherSide({y:0}, new THREE.Vector3(0, 1, 0));
+        break;
+      case 'N':
+        rubiks.rotateSliceUntilOtherSide({y:1}, new THREE.Vector3(0, 1, 0));
         break;
     }
   }
