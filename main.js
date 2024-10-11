@@ -22,7 +22,7 @@ scene.add( axesHelper );
 
 // Ajouter un écouteur d'événements pour capturer les touches du clavier
 const rotationVector = new THREE.Vector3();
-window.addEventListener('keydown', (event) => {
+window.addEventListener('keydown', async (event) => {
   if (!(rubiks.isCubeRotating || rubiks.isSliceRotating)) {
     allRubiksMovement.forEach((move) => {
       if(event.key === move.key) {
@@ -37,6 +37,10 @@ window.addEventListener('keydown', (event) => {
         rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
       }
     })
+
+    if (event.key === 'Enter') {
+      await rubiks.shuffleTimes(30);
+    }
   }
 });
 

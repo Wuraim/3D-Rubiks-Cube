@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Cubie from './cubie.class';
+import { allSliceMovement } from '../rotation.js';
 
 export default class RubiksCube {
 
@@ -28,18 +29,36 @@ export default class RubiksCube {
         this.group = rubiks;
     }
 
-    rotateUntilOtherSide(axis) {
+    async rotateUntilOtherSide(axis) {
         this.rotationAxis.copy(axis);
         this.isCubeRotating = true;
         this.isSliceRotating = false;
+
+        await new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!this.isCubeRotating) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 10);
+        });
     }
 
     listCubies = [];  
-    rotateSliceUntilOtherSide(slice, axis) {
+    async rotateSliceUntilOtherSide(slice, axis) {
         this.listCubies = this.getAllCubeWhoAreBetween(slice);
         this.rotationAxis.copy(axis);
         this.isCubeRotating = false;
         this.isSliceRotating = true;
+
+        await new Promise((resolve) => {
+            const interval = setInterval(() => {
+                if (!this.isSliceRotating) {
+                    clearInterval(interval);
+                    resolve();
+                }
+            }, 10);
+        });
     }
 
     getAllCubeWhoAreBetween({x,y,z}) {
@@ -89,6 +108,20 @@ export default class RubiksCube {
             }
             
             renderer.render(scene, camera);
+        }
+    }
+
+    rotationVector = new THREE.Vector3();
+    async shuffle(){
+        const randomNumber = Math.floor(Math.random() * allSliceMovement.length);
+        const move = allSliceMovement[randomNumber];
+        this.rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+        await this.rotateSliceUntilOtherSide(move.slice, this.rotationVector);
+    }
+
+    async shuffleTimes(times){
+        for (let i = 0; i < times; i++) {
+            await this.shuffle();
         }
     }
 }

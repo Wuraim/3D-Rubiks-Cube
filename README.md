@@ -4,5 +4,4 @@ Le but de ce repo est de tester la librairie three.js et de faire un rubiks cube
 
 TODO:
 - Avoir une sélection et un sens de mouvement drag and slide (recherche)
-- Faire une fonction mélangeur du rubiks cube
 - Recherche algorithme de solution
