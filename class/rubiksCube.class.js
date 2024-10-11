@@ -64,7 +64,11 @@ export default class RubiksCube {
         return (time) => {
 
             if (this.isCubeRotating) {
-                this.group.rotateOnWorldAxis(this.rotationAxis, RubiksCube.rotationPerFrame);
+                this.group.children.forEach((cube) => {
+                    cube.position.applyAxisAngle(this.rotationAxis, RubiksCube.rotationPerFrame);
+                    cube.rotateOnWorldAxis(this.rotationAxis, RubiksCube.rotationPerFrame);
+                })
+
                 this.targetRotation -= RubiksCube.rotationPerFrame;     
             } else if (this.isSliceRotating) {
                 this.listCubies.forEach((cube) => {
