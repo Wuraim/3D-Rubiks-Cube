@@ -4,6 +4,7 @@ import { allSliceMovement } from '../rotation.js';
 
 export default class RubiksCube {
 
+    // TODO: Ne plus définir de manière constante les frame par rotation
     static rotationAngle = Math.PI / 2;
     static framePerRotation = 30;
     static rotationPerFrame = this.rotationAngle / this.framePerRotation;
@@ -129,6 +130,7 @@ export default class RubiksCube {
         await this.rotateSliceUntilOtherSide(move.slice, this.rotationVector);
     }
 
+    // TODO: Ne pas avoir de mouvement contraire succesif
     async shuffleTimes(times){
         for (let i = 0; i < times; i++) {
             await this.shuffle();

@@ -83,7 +83,7 @@ function areInlineOnAxisField(axisField) {
     for(let i = 0; i < allPointedCube.length - 1; i++) {
       result = allPointedCube[i].position[axisField] === allPointedCube[i+1].position[axisField];
 
-      if(result === false) {
+      if (result === false) {
         break;
       }
     }
@@ -96,26 +96,53 @@ function areInline(){
   return areInlineOnAxisField('y') || areInlineOnAxisField('z');
 }
 
-function addPointedCube(cube) {
-  console.log('try to add')
-  console.log(cube)
+function getWantedRotation() {
+  let result = null;
+
+  if(areInlineOnAxisField('y')) {
+    const sense = allPointedCube[0].position.z;
+    result = {  
+      slice: {y: allPointedCube[0].position.y},
+      vector: {x: 0, y: sense, z: 0},
+    };
+  } else if (areInlineOnAxisField('z')) {
+    const sense = allPointedCube[0].position.y;
+    result = {  
+      slice: {z: allPointedCube[0].position.z},
+      vector: {x: 0, y: 0, z: -sense},
+    };
+  }
+
+  return result;
+}
+
+async function addPointedCube(cube) {
   if (cube && !allPointedCube.includes(cube)) {
     allPointedCube.push(cube);
-    console.log('allPointedCube.length', allPointedCube.length)
 
-    if (allPointedCube.length === 3) {
-      if(areInline()) {
-        console.log('THEY ARE INLINE !!');
-      }
-
-      allPointedCube = [];
+    if(allPointedCube.length === 3) {
+      debugger;
     }
-  } else {
-    console.log('allPointedCube.includes(cube)', allPointedCube.includes(cube))
+
+    if(allPointedCube.length > 1) {
+      const inlined = areInline();
+
+      if (!inlined) {
+        allPointedCube.splice(0, allPointedCube.length - 1);
+      } else if (allPointedCube.length === 3 && inlined) {
+        console.log('INLINED')
+        const move = getWantedRotation();
+        rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+        await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
+
+        allPointedCube = [];
+      }
+    }
+    
   }
 }
 
-function onPointerMove(event) {
+async function onPointerMove(event) {
   if (!isMouseDown) return;  // Ne fonctionne que lorsque le bouton gauche est maintenu
 
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -123,8 +150,7 @@ function onPointerMove(event) {
 
   const pointedCubie = getPointedCubie();
 
-  addPointedCube(pointedCubie)
-  // console.log('pointedCubie', pointedCubie);
+  await addPointedCube(pointedCubie)
 }
 
 function onMouseDown(event) {
