@@ -81,7 +81,12 @@ function areInlineOnAxisField(axisField) {
   
   if(allPointedCube.length >= 2) {
     for(let i = 0; i < allPointedCube.length - 1; i++) {
-      result = allPointedCube[i].position[axisField] === allPointedCube[i+1].position[axisField];
+
+      const areOnTheSameAxis = allPointedCube[i].position[axisField] === allPointedCube[i+1].position[axisField];
+      const areInOrderY = Math.abs(allPointedCube[i].position.y - allPointedCube[i+1].position.y) === 1;
+      const areInOrderZ = Math.abs(allPointedCube[i].position.z - allPointedCube[i+1].position.z) === 1;
+
+      result = areOnTheSameAxis && (areInOrderY || areInOrderZ);
 
       if (result === false) {
         break;
@@ -121,7 +126,7 @@ async function addPointedCube(cube) {
     allPointedCube.push(cube);
 
     if(allPointedCube.length === 3) {
-      debugger;
+      // debugger;
     }
 
     if(allPointedCube.length > 1) {
@@ -130,7 +135,7 @@ async function addPointedCube(cube) {
       if (!inlined) {
         allPointedCube.splice(0, allPointedCube.length - 1);
       } else if (allPointedCube.length === 3 && inlined) {
-        console.log('INLINED')
+        
         const move = getWantedRotation();
         rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
         await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
@@ -138,7 +143,6 @@ async function addPointedCube(cube) {
         allPointedCube = [];
       }
     }
-    
   }
 }
 
