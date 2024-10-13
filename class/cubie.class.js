@@ -26,20 +26,41 @@ function createBorderedTexture(color) {
 
 export default class Cubie {
     static cubeSize = 1;
+    mesh = null;
 
-    materials = [
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff00ff') }),  // Magenta vif (avant)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ff4500') }),  // Orange vif (arrière)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#ffffff') }),  // Blanc (haut)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#39ff14') }),  // Vert néon (bas)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#007fff') }),  // Bleu électrique (droite)
-        new THREE.MeshBasicMaterial({ map: createBorderedTexture('#f9ff00') })   // Jaune fluo (gauche)
-    ];
+    allColor = [
+        '#ff00ff',
+        '#ff4500',
+        '#ffffff',
+        '#39ff14',
+        '#007fff',
+        '#f9ff00',
+    ]
+
+    materials = this.allColor.map((color) => {
+        return new THREE.MeshBasicMaterial({  map: createBorderedTexture(color) })
+    })
+
+    emptyMaterials = this.allColor.map((color) => {
+        return new THREE.MeshBasicMaterial({ 
+            color: color,  // Cyan
+            transparent: true, 
+            opacity: 0.3,  // Niveau de transparence (0.0 = totalement transparent, 1.0 = opaque)
+            side: THREE.DoubleSide // Pour que les faces internes soient visibles aussi
+        })
+    })
 
     constructor(x,y,z) {
         const geometry = new THREE.BoxGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
-        const cube = new THREE.Mesh(geometry, this.materials);
-        cube.position.set(x, y, z);
-        return cube;
+        this.mesh = new THREE.Mesh(geometry, this.materials);
+        this.mesh.position.set(x, y, z);
+    }
+
+    displayAsDefault() {
+        this.mesh.material = this.materials;
+    }
+
+    displayAsSelected(){
+        this.mesh.material = this.emptyMaterials;
     }
 }

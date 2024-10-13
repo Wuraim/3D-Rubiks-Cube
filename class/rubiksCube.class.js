@@ -14,14 +14,16 @@ export default class RubiksCube {
     isSliceRotating = false;
 
     group = null;
+    allCubies = [];
     
     constructor() {
         const rubiks = new THREE.Group();
         for (let x = -1; x <= 1; x++) {
             for (let y = -1; y <= 1; y++) {
                 for (let z = -1; z <= 1; z++) {
-                    const cube = new Cubie(x,y,z);
-                    rubiks.add(cube);
+                    const cubie = new Cubie(x,y,z);
+                    this.allCubies.push(cubie);
+                    rubiks.add(cubie.mesh);
                 }
             }
         }
@@ -78,7 +80,13 @@ export default class RubiksCube {
         return result;
     }
 
+    // TODO: Lancer cette fonction à chaque changement de position et garder le résultat dans une variable
+    getFrontSlice(){
+        return this.getAllCubeWhoAreBetween({x:1})
+    }
+
     targetRotation = RubiksCube.rotationAngle;
+    t0 = 0;
     getAnimation(renderer, scene, camera){
         return (time) => {
 
@@ -87,7 +95,6 @@ export default class RubiksCube {
                     cube.position.applyAxisAngle(this.rotationAxis, RubiksCube.rotationPerFrame);
                     cube.rotateOnWorldAxis(this.rotationAxis, RubiksCube.rotationPerFrame);
                 })
-
                 this.targetRotation -= RubiksCube.rotationPerFrame;     
             } else if (this.isSliceRotating) {
                 this.listCubies.forEach((cube) => {
@@ -106,7 +113,10 @@ export default class RubiksCube {
                 this.isSliceRotating = false;
                 this.targetRotation = RubiksCube.rotationAngle;
             }
-            
+
+            // console.log('delay :', time - this.t0);
+            this.t0 = time;
+
             renderer.render(scene, camera);
         }
     }
