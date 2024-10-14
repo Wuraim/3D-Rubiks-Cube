@@ -11,10 +11,8 @@ const rendererFrame = document.querySelector('#rendererFrame');
 renderer.setSize(window.innerWidth, window.innerHeight);
 
 const rubiks = new RubiksCube();
-
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2(999, 999);
-
 
 renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
 rendererFrame.appendChild(renderer.domElement);
