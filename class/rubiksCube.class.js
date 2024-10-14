@@ -115,7 +115,6 @@ export default class RubiksCube {
                 this.targetRotation = RubiksCube.rotationAngle;
             }
 
-            // console.log('delay :', time - this.t0);
             this.t0 = time;
 
             renderer.render(scene, camera);

@@ -67,7 +67,6 @@ function getPointedCubie() {
   let result = null;
   raycaster.setFromCamera(pointer, camera);
   const intersects = raycaster.intersectObjects(rubiks.getFrontSlice());
-  // console.log(intersects)
   if (intersects[0]) {
     result = intersects[0].object;
   }
@@ -76,15 +75,19 @@ function getPointedCubie() {
 
 let allPointedCube = []
 
+function isApproximatively(a,b) {
+  return a > b - 0.1 && a < b + 0.1;
+}
+
 function areInlineOnAxisField(axisField) {
   let result = null;
   
   if(allPointedCube.length >= 2) {
     for(let i = 0; i < allPointedCube.length - 1; i++) {
 
-      const areOnTheSameAxis = allPointedCube[i].position[axisField] === allPointedCube[i+1].position[axisField];
-      const areInOrderY = Math.abs(allPointedCube[i].position.y - allPointedCube[i+1].position.y) === 1;
-      const areInOrderZ = Math.abs(allPointedCube[i].position.z - allPointedCube[i+1].position.z) === 1;
+      const areOnTheSameAxis = isApproximatively(allPointedCube[i].position[axisField], allPointedCube[i+1].position[axisField]);
+      const areInOrderY = isApproximatively(Math.abs(allPointedCube[i].position.y - allPointedCube[i+1].position.y), 1);
+      const areInOrderZ = isApproximatively(Math.abs(allPointedCube[i].position.z - allPointedCube[i+1].position.z), 1);
 
       result = areOnTheSameAxis && (areInOrderY || areInOrderZ);
 
@@ -125,10 +128,6 @@ async function addPointedCube(cube) {
   if (cube && !allPointedCube.includes(cube)) {
     allPointedCube.push(cube);
 
-    if(allPointedCube.length === 3) {
-      // debugger;
-    }
-
     if(allPointedCube.length > 1) {
       const inlined = areInline();
 
@@ -139,9 +138,11 @@ async function addPointedCube(cube) {
         const move = getWantedRotation();
         rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
         await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
-
-        allPointedCube = [];
       }
+    }
+
+    if (allPointedCube.length === 3) {
+      allPointedCube = [];
     }
   }
 }
