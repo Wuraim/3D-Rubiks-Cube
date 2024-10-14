@@ -121,18 +121,40 @@ export default class RubiksCube {
         }
     }
 
-    rotationVector = new THREE.Vector3();
-    async shuffle(){
+    getRandomMove() {
         const randomNumber = Math.floor(Math.random() * allSliceMovement.length);
-        const move = allSliceMovement[randomNumber];
-        this.rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
-        await this.rotateSliceUntilOtherSide(move.slice, this.rotationVector);
+        return allSliceMovement[randomNumber];
     }
 
-    // TODO: Ne pas avoir de mouvement contraire succesif
+    vectorSameAbsValue(vectorA, vectorB) {
+        return Math.abs(vectorA.x) === Math.abs(vectorB.x) && 
+        Math.abs(vectorA.y) === Math.abs(vectorB.y) &&
+        Math.abs(vectorA.z) === Math.abs(vectorB.z);
+    }
+
+    rotationVector = new THREE.Vector3();
+
+    isNotSameAxisRotation(move, allRandomMove){
+        this.vectorSameAbsValue(move.vector, allRandomMove[allRandomMove.length - 1].vector)
+    }
+
     async shuffleTimes(times){
+        const allRandomMove = [];
+
         for (let i = 0; i < times; i++) {
-            await this.shuffle();
+            let move = null;
+
+            if (allRandomMove.length === 0) {
+                move = this.getRandomMove();
+            } else {
+                do {
+                    move = this.getRandomMove();
+                } while (this.isNotSameAxisRotation(move, allRandomMove))
+            }
+
+            allRandomMove.push(move);
+            this.rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+            await this.rotateSliceUntilOtherSide(move.slice, this.rotationVector);
         }
     }
 }
