@@ -4,7 +4,6 @@ Le but de ce repo est de tester la librairie three.js et de faire un rubiks cube
 
 TODO:
 - Recherche algorithme de solution
-- Enlever les rotations par appuie de touche du clavier
 - Lancer cette fonction à chaque changement de position et garder le résultat dans une variable
 - Ne plus définir de manière constante les frame par rotation
 
