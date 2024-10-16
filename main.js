@@ -26,10 +26,10 @@ scene.add( axesHelper );
 const rotationVector = new THREE.Vector3();
 window.addEventListener('keydown', async (event) => {
   if (!(rubiks.isCubeRotating || rubiks.isSliceRotating)) {
-    await allSliceMovement.forEach(async (move) => {
+    await allRubiksMovement.forEach(async (move) => {
       if(event.key === move.key) {
         rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
-        await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
+        await rubiks.rotateUntilOtherSide(rotationVector);
       }
     })
 
