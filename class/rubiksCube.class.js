@@ -91,11 +91,12 @@ export default class RubiksCube {
     getAnimation(renderer, scene, camera){
         return () => {
             let rotationPerFrame = 0;
+            let delta = 0;
             if (this.isCubeRotating || this.isSliceRotating) {
                 if(this.clock.running === false) {
                     this.clock.start();
                 }
-                let delta = this.clock.getDelta();
+                delta = this.clock.getDelta();
                 rotationPerFrame = RubiksCube.rotationAngle * (delta / RubiksCube.rotationTimeSec);
             }
 
