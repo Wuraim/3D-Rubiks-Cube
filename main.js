@@ -169,3 +169,11 @@ window.addEventListener('mousemove', onPointerMove);
 
 const state = new State();
 state.showState();
+state.rotateFrontCounterClockwise();
+state.showState();
+state.rotateFrontCounterClockwise();
+state.showState();
+state.rotateFrontCounterClockwise();
+state.showState();
+state.rotateFrontCounterClockwise();
+state.showState();
