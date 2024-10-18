@@ -1,10 +1,10 @@
 export default class State {
 
     Up = [
-            ['W','W','W'],
-            ['W','W','W'],
-            ['W','W','W']
-        ]
+        ['W','W','W'],            
+        ['W','W','W'],
+        ['W','W','W']
+    ]
 
     Down = [
         ['Y','Y','Y'],

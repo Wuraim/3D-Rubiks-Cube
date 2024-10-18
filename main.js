@@ -1,6 +1,5 @@
 import * as THREE from 'three';
 import RubiksCube from './class/rubiksCube.class.js';
-import State from './class/state.class.js';
 
 import { allRubiksMovement } from './rotation.js';
 
@@ -166,14 +165,3 @@ function onMouseUp(event) {
 window.addEventListener('mousedown', onMouseDown);
 window.addEventListener('mouseup', onMouseUp);
 window.addEventListener('mousemove', onPointerMove);
-
-const state = new State();
-state.showState();
-state.rotateFrontCounterClockwise();
-state.showState();
-state.rotateFrontCounterClockwise();
-state.showState();
-state.rotateFrontCounterClockwise();
-state.showState();
-state.rotateFrontCounterClockwise();
-state.showState();
