@@ -88,19 +88,28 @@ export default class RubiksCube {
 
     targetRotation = RubiksCube.rotationAngle;
     clock = new THREE.Clock();
+    rotationSum = 0;
     getAnimation(renderer, scene, camera){
         return () => {
             let rotationPerFrame = 0;
             let delta = 0;
-            if (this.isCubeRotating || this.isSliceRotating) {
-                if(this.clock.running === false) {
+            
+            if (this.isCubeRotating || this.isSliceRotating) {    
+                if (this.clock.running === false) {
                     this.clock.start();
                 }
+                
                 delta = this.clock.getDelta();
                 rotationPerFrame = RubiksCube.rotationAngle * (delta / RubiksCube.rotationTimeSec);
+
+                if (rotationPerFrame > this.targetRotation) {
+                    rotationPerFrame = this.targetRotation;
+                }
+
+                this.rotationSum += rotationPerFrame;
             }
 
-            if (this.isCubeRotating) {             
+            if (this.isCubeRotating) {
                 console.log('rotationPerFrame', rotationPerFrame, 'delta', delta)
                 this.group.children.forEach((cube) => {
                     cube.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
@@ -108,7 +117,7 @@ export default class RubiksCube {
                 })
                 this.targetRotation -= rotationPerFrame;     
             } else if (this.isSliceRotating) {
-                const rotationPerFrame = this.rotationAngle * (this.clock.getDelta() / this.rotationTimeMs);
+                // const rotationPerFrame = this.rotationAngle * (this.clock.getDelta() / this.rotationTimeMs);
                 this.listCubies.forEach((cube) => {
                     cube.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
                     cube.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
@@ -116,14 +125,16 @@ export default class RubiksCube {
                 this.targetRotation -= rotationPerFrame;     
             }
 
-            if (this.targetRotation < 0) {
+            if (this.targetRotation <= 0) {
                 if (this.isSliceRotating) {
                     this.listCubies = [];
                 }
 
                 this.isCubeRotating = false;
                 this.isSliceRotating = false;
+                console.log('rotation', RubiksCube.rotationAngle, 'rotationSum', this.rotationSum, 'this.targetRotation', this.targetRotation)
                 this.targetRotation = RubiksCube.rotationAngle;
+                this.rotationSum = 0; 
                 this.clock.stop();
             }
 
