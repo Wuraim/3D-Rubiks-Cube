@@ -6,7 +6,7 @@ export default class RubiksCube {
 
     // TODO: Ne plus définir de manière constante les frame par rotation
     static rotationAngle = Math.PI / 2;
-    static rotationTimeSec = 0.4;
+    static rotationTimeSec = 0.35;
     static framePerRotation = 30;
     
     targetRotation = 0;
@@ -110,14 +110,12 @@ export default class RubiksCube {
             }
 
             if (this.isCubeRotating) {
-                console.log('rotationPerFrame', rotationPerFrame, 'delta', delta)
                 this.group.children.forEach((cube) => {
                     cube.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
                     cube.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
                 })
                 this.targetRotation -= rotationPerFrame;     
             } else if (this.isSliceRotating) {
-                // const rotationPerFrame = this.rotationAngle * (this.clock.getDelta() / this.rotationTimeMs);
                 this.listCubies.forEach((cube) => {
                     cube.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
                     cube.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
