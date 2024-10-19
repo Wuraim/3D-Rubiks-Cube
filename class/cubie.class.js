@@ -29,13 +29,15 @@ export default class Cubie {
     mesh = null;
 
     allColor = [
-        '#ff00ff',
-        '#ff4500',
-        '#ffffff',
-        '#39ff14',
-        '#007fff',
-        '#f9ff00',
-    ]
+        '#ff0000',  // Rouge
+        '#ff8c00',  // Orange 
+        '#ffffff',  // Blanc
+        '#39ff14',  // Vert
+        '#0000cd',  // Bleu
+        '#ffff00',  // Jaune
+    ];
+    
+    
 
     materials = this.allColor.map((color) => {
         return new THREE.MeshBasicMaterial({  map: createBorderedTexture(color) })
