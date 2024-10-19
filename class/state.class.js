@@ -96,6 +96,36 @@ export default class State {
         console.log('')
     }
 
+    doMakeRotationByVector(slice, tVec){
+        console.log(tVec)
+        if (slice.x === -1 && tVec.x === 1) {
+            this.rotateFrontClockwise();
+        } else if (slice.x === -1 && tVec.x === -1) {
+            this.rotateFrontCounterClockwise();
+        } else if (slice.x === 1 && tVec.x === 1) {
+            this.rotateBackClockwise();
+        } else if (slice.x === -1 && tVec.x === -1) {
+            this.rotateBackCounterClockwise();
+        } else if (slice.y === 1 && tVec.y === 1) {
+            this.rotateRightClockwise();
+        } else if (slice.y === 1 && tVec.y === -1) {
+            this.rotateRightCounterClockwise();
+        } else if (slice.y === -1 && tVec.y === 1) {
+            this.rotateLeftClockwise();
+        } else if (slice.y === -1 && tVec.y === -1) {
+            this.rotateLeftCounterClockwise();
+        } else if (slice.z === 1 && tVec.z === 1) {
+            this.rotateUpClockwise();
+        } else if (slice.z === 1 && tVec.z === -1) {
+            this.rotateUpCounterClockwise();
+        } else if (slice.z === -1 && tVec.z === 1) {
+            this.rotateDownClockwise();
+        } else if (slice.z === -1 && tVec.z === -1) {
+            this.rotateDownCounterClockwise();
+        }
+        this.showState();
+    }
+
     rotateFaceClockwise(face) {
         const N = face.length;
         const newFace = Array.from({ length: N }, () => Array(N).fill(''));

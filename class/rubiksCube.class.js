@@ -7,7 +7,7 @@ export default class RubiksCube {
 
     // TODO: Ne plus définir de manière constante les frame par rotation
     static rotationAngle = Math.PI / 2;
-    static rotationTimeSec = 0.35;
+    static rotationTimeSec = 0.3;
     static framePerRotation = 30;
     
     targetRotation = 0;
@@ -55,6 +55,8 @@ export default class RubiksCube {
         this.rotationAxis.copy(axis);
         this.isCubeRotating = false;
         this.isSliceRotating = true;
+        
+        this.state.doMakeRotationByVector(slice, this.rotationAxis);
 
         await new Promise((resolve) => {
             const interval = setInterval(() => {
