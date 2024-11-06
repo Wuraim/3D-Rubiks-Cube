@@ -49,6 +49,17 @@ export default class RubiksCube {
         });
     }
 
+    mainRotationVector = new THREE.Vector3(0,0,0);
+    incrementMainRotationVector(rotationVector){
+        this.mainRotationVector.add(rotationVector);
+    }
+
+    getStateSliceFromWorldSlice(worldSlice) {
+        
+
+        return {}
+    }
+
     listCubies = [];  
     async rotateSliceUntilOtherSide(slice, axis) {
         this.listCubies = this.getAllCubeWhoAreBetween(slice);
@@ -56,6 +67,10 @@ export default class RubiksCube {
         this.isCubeRotating = false;
         this.isSliceRotating = true;
         
+        // Here, I need to swith form slice with world coordinate to local coordinate
+        // Solution 1 :
+        // - Traquer chaque rotation compléte
+        // - A chaque rotation, conserver la rotation actuellement compléte sur l'axe x, et celle sur l'axe y
         this.state.doMakeRotationByVector(slice, this.rotationAxis);
 
         await new Promise((resolve) => {

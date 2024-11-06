@@ -96,6 +96,7 @@ export default class State {
         console.log('')
     }
 
+    // Parameters should be faces and boolean for clockwise or not
     doMakeRotationByVector(slice, tVec){
         console.log(tVec)
         if (slice.x === -1 && tVec.x === 1) {
