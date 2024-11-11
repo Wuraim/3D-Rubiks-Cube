@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import Cubie from './cubie.class';
 import State from './state.class';
-import { allSliceMovement, MovementVector, SliceMovement } from '../rotation.js';
+import { allSliceMovement, MovementVector, SliceMovement } from '../rotation';
 import { Slice } from '../model/slice';
 
 export default class RubiksCube {
