@@ -3,6 +3,7 @@ import Cubie from './cubie.class';
 import State from './state.class';
 import { allSliceMovement, MovementVector, SliceMovement } from '../rotation';
 import { Slice } from '../model/slice';
+import { getStateSlice } from '../service/rubiksToState';
 
 export default class RubiksCube {
 
@@ -60,7 +61,8 @@ export default class RubiksCube {
         // Solution 1 :
         // - Traquer chaque rotation compléte
         // - A chaque rotation, conserver la rotation actuellement compléte sur l'axe x, et celle sur l'axe y
-        this.state.doMakeRotationByVector(slice, this.rotationAxis);
+        const stateSliceAndWise = getStateSlice(this.mainRotationVector, slice, axis)
+        this.state.doMakeRotationByVector(stateSliceAndWise.slice, stateSliceAndWise.isClockWise);
 
         await new Promise((resolve) => {
             const interval = setInterval(() => {
