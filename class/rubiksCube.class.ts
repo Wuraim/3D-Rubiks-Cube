@@ -1,23 +1,21 @@
 import * as THREE from 'three';
 import Cubie from './cubie.class';
-import State from './state.class.js';
-import { allSliceMovement } from '../rotation.js';
+import State from './state.class';
+import { allSliceMovement, MovementVector, SliceMovement } from '../rotation.js';
+import { Slice } from '../model/slice';
 
 export default class RubiksCube {
 
-    // TODO: Ne plus définir de manière constante les frame par rotation
     static rotationAngle = Math.PI / 2;
     static rotationTimeSec = 0.3;
-    static framePerRotation = 30;
     
-    targetRotation = 0;
-    rotationAxis = new THREE.Vector3();
+    rotationAxis: THREE.Vector3 = new THREE.Vector3();
     isCubeRotating = false;
     isSliceRotating = false;
 
-    state = new State();
-    group = null;
-    allCubies = [];
+    state: State = new State();
+    group: THREE.Group<THREE.Object3DEventMap>;
+    allCubies: Array<Cubie> = [];
 
     constructor() {
         const rubiks = new THREE.Group();
@@ -26,7 +24,7 @@ export default class RubiksCube {
                 for (let z = -1; z <= 1; z++) {
                     const cubie = new Cubie(x,y,z);
                     this.allCubies.push(cubie);
-                    rubiks.add(cubie.mesh);
+                    rubiks.add(cubie.mesh as THREE.Mesh);
                 }
             }
         }
@@ -34,7 +32,9 @@ export default class RubiksCube {
         this.group = rubiks;
     }
 
-    async rotateUntilOtherSide(axis) {
+    mainRotationVector = new THREE.Vector3(0,0,0);
+    async rotateUntilOtherSide(axis: THREE.Vector3) {
+        this.mainRotationVector.add(axis);
         this.rotationAxis.copy(axis);
         this.isCubeRotating = true;
         this.isSliceRotating = false;
@@ -43,25 +43,14 @@ export default class RubiksCube {
             const interval = setInterval(() => {
                 if (!this.isCubeRotating) {
                     clearInterval(interval);
-                    resolve();
+                    resolve(null);
                 }
             }, 10);
         });
     }
 
-    mainRotationVector = new THREE.Vector3(0,0,0);
-    incrementMainRotationVector(rotationVector){
-        this.mainRotationVector.add(rotationVector);
-    }
-
-    getStateSliceFromWorldSlice(worldSlice) {
-        
-
-        return {}
-    }
-
-    listCubies = [];  
-    async rotateSliceUntilOtherSide(slice, axis) {
+    listCubies: Array<THREE.Object3D<THREE.Object3DEventMap>> = [];  
+    async rotateSliceUntilOtherSide(slice: Slice, axis: THREE.Vector3) {
         this.listCubies = this.getAllCubeWhoAreBetween(slice);
         this.rotationAxis.copy(axis);
         this.isCubeRotating = false;
@@ -77,14 +66,15 @@ export default class RubiksCube {
             const interval = setInterval(() => {
                 if (!this.isSliceRotating) {
                     clearInterval(interval);
-                    resolve();
+                    resolve(null);
+
                 }
             }, 10);
         });
     }
 
-    getAllCubeWhoAreBetween({x,y,z}) {
-        const result = [];
+    getAllCubeWhoAreBetween({x,y,z}: Partial<Slice>): Array<THREE.Object3D<THREE.Object3DEventMap>> {
+        const result: Array<THREE.Object3D<THREE.Object3DEventMap>> = [];
         this.group.children.forEach((cube) => {
           const position = cube.position;
       
@@ -107,7 +97,7 @@ export default class RubiksCube {
 
     targetRotation = RubiksCube.rotationAngle;
     clock = new THREE.Clock();
-    getAnimation(renderer, scene, camera){
+    getAnimation(renderer: THREE.Renderer, scene: THREE.Scene, camera: THREE.Camera){
         return () => {
             let rotationPerFrame = 0;
             let delta = 0;
@@ -147,7 +137,6 @@ export default class RubiksCube {
                 this.isCubeRotating = false;
                 this.isSliceRotating = false;
                 this.targetRotation = RubiksCube.rotationAngle;
-                this.rotationSum = 0; 
                 this.clock.stop();
             }
 
@@ -160,7 +149,7 @@ export default class RubiksCube {
         return allSliceMovement[randomNumber];
     }
 
-    vectorSameAbsValue(vectorA, vectorB) {
+    vectorSameAbsValue(vectorA: MovementVector, vectorB: MovementVector) {
         return Math.abs(vectorA.x) === Math.abs(vectorB.x) && 
         Math.abs(vectorA.y) === Math.abs(vectorB.y) &&
         Math.abs(vectorA.z) === Math.abs(vectorB.z);
@@ -168,12 +157,12 @@ export default class RubiksCube {
 
     rotationVector = new THREE.Vector3();
 
-    isNotSameAxisRotation(move, allRandomMove){
-        this.vectorSameAbsValue(move.vector, allRandomMove[allRandomMove.length - 1].vector)
+    isNotSameAxisRotation(move: SliceMovement, move2: SliceMovement): boolean {
+        return this.vectorSameAbsValue(move.vector, move2.vector)
     }
 
-    async shuffleTimes(times){
-        const allRandomMove = [];
+    async shuffleTimes(times: number){
+        const allRandomMove: Array<SliceMovement> = [];
 
         for (let i = 0; i < times; i++) {
             let move = null;
@@ -183,7 +172,7 @@ export default class RubiksCube {
             } else {
                 do {
                     move = this.getRandomMove();
-                } while (this.isNotSameAxisRotation(move, allRandomMove))
+                } while (this.isNotSameAxisRotation(move,  allRandomMove[allRandomMove.length - 1]))
             }
 
             allRandomMove.push(move);

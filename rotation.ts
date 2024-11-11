@@ -1,4 +1,22 @@
-export const allRubiksMovement = [
+import { Slice } from "./model/slice";
+
+export interface MovementVector {
+    x: number;
+    y: number;
+    z: number;
+}
+
+export interface RubiksMovement {
+    key: string;
+    vector: MovementVector;
+}
+
+export interface SliceMovement {
+    slice: Slice;
+    vector: MovementVector;
+}
+
+export const allRubiksMovement: Array<RubiksMovement> = [
     {
         key: 'ArrowRight',
         vector: {x: 0, y: 0, z: 1},
@@ -17,7 +35,7 @@ export const allRubiksMovement = [
     },
 ]
 
-export const allSliceMovement = [
+export const allSliceMovement: Array<SliceMovement> = [
     {
         slice: {z: 1},
         vector: {x: 0, y: 0, z: 1},

@@ -1,3 +1,6 @@
+import { Face } from "../model/face";
+import { Slice } from "../model/slice";
+
 export default class State {
 
     Up = [
@@ -36,7 +39,7 @@ export default class State {
         ['R','R','R']
     ];
 
-    getColoredCubie(cubie) {
+    getColoredCubie(cubie: string) {
         switch (cubie) {
             case 'W': return '\x1b[37mW\x1b[0m';
             case 'Y': return '\x1b[33mY\x1b[0m';
@@ -51,8 +54,8 @@ export default class State {
         return '\x1b[30m|\x1b[0m';
     }
 
-    getFaceDisplay(face) {
-        let result = [];
+    getFaceDisplay(face: Face): Array<string> {
+        let result: Array<string> = [];
         face.forEach((line) => {
             const coloredLine = line.map(cubie => this.getColoredCubie(cubie)).join(this.getPipe());
             result.push(this.getPipe() + coloredLine + this.getPipe());
@@ -64,7 +67,7 @@ export default class State {
         return Array(3).fill('       ');
     }
 
-    concatFaceDisplay(d1, d2){
+    concatFaceDisplay(d1: Array<string>, d2: Array<string>){
         let result = [];
 
         for(let i = 0; i < d1.length; i++) {
@@ -74,7 +77,7 @@ export default class State {
         return result;
     }
 
-    logDisplay(finalDisplay){
+    logDisplay(finalDisplay: Array<string>){
         finalDisplay.forEach((line) => console.log(line));
     }
 
@@ -97,37 +100,37 @@ export default class State {
     }
 
     // Parameters should be faces and boolean for clockwise or not
-    doMakeRotationByVector(slice, tVec){
-        console.log(tVec)
-        if (slice.x === -1 && tVec.x === 1) {
+    doMakeRotationByVector(slice: Slice, isClockwise: boolean){
+        console.log(slice, isClockwise)
+        if (slice.x === -1 && isClockwise) {
             this.rotateFrontClockwise();
-        } else if (slice.x === -1 && tVec.x === -1) {
+        } else if (slice.x === -1 && !isClockwise) {
             this.rotateFrontCounterClockwise();
-        } else if (slice.x === 1 && tVec.x === 1) {
+        } else if (slice.x === 1 && isClockwise) {
             this.rotateBackClockwise();
-        } else if (slice.x === -1 && tVec.x === -1) {
+        } else if (slice.x === -1 && !isClockwise) {
             this.rotateBackCounterClockwise();
-        } else if (slice.y === 1 && tVec.y === 1) {
+        } else if (slice.y === 1 && isClockwise) {
             this.rotateRightClockwise();
-        } else if (slice.y === 1 && tVec.y === -1) {
+        } else if (slice.y === 1 && !isClockwise) {
             this.rotateRightCounterClockwise();
-        } else if (slice.y === -1 && tVec.y === 1) {
+        } else if (slice.y === -1 && isClockwise) {
             this.rotateLeftClockwise();
-        } else if (slice.y === -1 && tVec.y === -1) {
+        } else if (slice.y === -1 && !isClockwise) {
             this.rotateLeftCounterClockwise();
-        } else if (slice.z === 1 && tVec.z === 1) {
+        } else if (slice.z === 1 && isClockwise) {
             this.rotateUpClockwise();
-        } else if (slice.z === 1 && tVec.z === -1) {
+        } else if (slice.z === 1 && !isClockwise) {
             this.rotateUpCounterClockwise();
-        } else if (slice.z === -1 && tVec.z === 1) {
+        } else if (slice.z === -1 && isClockwise) {
             this.rotateDownClockwise();
-        } else if (slice.z === -1 && tVec.z === -1) {
+        } else if (slice.z === -1 && !isClockwise) {
             this.rotateDownCounterClockwise();
         }
         this.showState();
     }
 
-    rotateFaceClockwise(face) {
+    rotateFaceClockwise(face: Face): Face {
         const N = face.length;
         const newFace = Array.from({ length: N }, () => Array(N).fill(''));
     
@@ -140,7 +143,7 @@ export default class State {
         return newFace;
     }
 
-    rotateFaceCounterClockwise(face) {
+    rotateFaceCounterClockwise(face: Face): Face {
         const N = face.length;
         const newFace = Array.from({ length: N }, () => Array(N).fill(''));
     

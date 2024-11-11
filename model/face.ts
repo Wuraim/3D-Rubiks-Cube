@@ -1,0 +1,1 @@
+export type Face = Array<Array<string>>;

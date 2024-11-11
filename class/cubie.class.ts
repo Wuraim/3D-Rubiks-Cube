@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 
-function createBorderedTexture(color) {
+function createBorderedTexture(color: string) {
     const size = 256;  // Taille de la texture
     const borderSize = 16;  // Taille de la bordure
   
@@ -9,7 +9,7 @@ function createBorderedTexture(color) {
     canvas.width = size;
     canvas.height = size;
   
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext('2d')!;
   
     // Remplir le fond avec la couleur noire (pour la bordure)
     context.fillStyle = '#000000';  // Noir pour la bordure
@@ -25,8 +25,8 @@ function createBorderedTexture(color) {
 }
 
 export default class Cubie {
-    static cubeSize = 1;
-    mesh = null;
+    static cubeSize: number = 1;
+    mesh: THREE.Mesh | null = null;
 
     allColor = [
         '#ff0000',  // Rouge
@@ -52,17 +52,33 @@ export default class Cubie {
         })
     })
 
-    constructor(x,y,z) {
-        const geometry = new THREE.BoxGeometry(this.cubeSize, this.cubeSize, this.cubeSize);
+    constructor(x: number, y: number, z: number) {
+        const geometry = new THREE.BoxGeometry(Cubie.cubeSize, Cubie.cubeSize, Cubie.cubeSize);
         this.mesh = new THREE.Mesh(geometry, this.materials);
         this.mesh.position.set(x, y, z);
     }
 
     displayAsDefault() {
-        this.mesh.material = this.materials;
+        try {
+            if (this.mesh) {
+                this.mesh.material = this.materials;
+            } else {
+                throw new Error("The Mesh of the cubie is not defined")
+            }
+        } catch (err) {
+            throw err;
+        }
     }
 
     displayAsSelected(){
-        this.mesh.material = this.emptyMaterials;
+        try {
+            if (this.mesh) {
+                this.mesh.material = this.emptyMaterials;
+            } else {
+                throw new Error("The Mesh of the cubie is not defined")
+            }
+        } catch (err) {
+            throw err;
+        }
     }
 }
