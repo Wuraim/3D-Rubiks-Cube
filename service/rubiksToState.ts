@@ -7,7 +7,6 @@ export interface StateSliceAndWise {
 }
 
 function setIdentityVector(mainRotation: THREE.Vector3): void {
-    
     mainRotation.y %= 4;
     if (Math.abs(mainRotation.y) > 2) {
         mainRotation.y = -(mainRotation.y % 2);
@@ -19,16 +18,56 @@ function setIdentityVector(mainRotation: THREE.Vector3): void {
     }
 }
 
+function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, slice: Slice){
+    switch(mainRotation.y) {
+        case 2:
+            // z -> -z
+            slice.z = slice.z ? -slice.z : undefined;
+            break;
+        case 1:
+            // z -> x
+            slice.z = slice.x ? slice.x : undefined;
+            break;
+        case -1:
+            // z -> -x
+            slice.z = slice.x ? -slice.x : undefined;
+            break;
+        case -2:
+            // z -> -z
+            slice.z = slice.z ? -slice.z : undefined;
+           break;
+    }
+    
+    switch(mainRotation.z) {
+        case 2:
+            // y -> -y
+            slice.y = slice.y ? -slice.y : undefined;
+            break;
+        case 1:
+            // y -> -x
+            slice.y = slice.x ? -slice.x : undefined;
+            break;
+        case -1:
+            // y -> x
+            slice.y = slice.x ? slice.x : undefined;
+            break;
+        case -2:
+            // y -> -y
+            slice.y = slice.y ? -slice.y : undefined;
+            break;
+    }
+}
+
+function isAxisClockwise(axis: THREE.Vector3): boolean {
+    return axis.x === 1 || axis.y === 1 || axis.z === 1;
+}
+
 export function getStateSlice(mainRotation: THREE.Vector3, slice: Slice, axis: THREE.Vector3): StateSliceAndWise {
-
     setIdentityVector(mainRotation);
-
-    // Ensuite
-    // Pour slice z -> 1
-    // Si mainRotation, OK, si mainRotation = 1 -> , si mainRotation = 2
-
+    transformSliceBaseOnMainRotation(mainRotation, slice);
+   
     return {
-        slice: {},
-        isClockWise: true,
+        slice,
+        isClockWise: isAxisClockwise(axis),
     };
 }

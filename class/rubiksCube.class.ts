@@ -69,7 +69,6 @@ export default class RubiksCube {
                 if (!this.isSliceRotating) {
                     clearInterval(interval);
                     resolve(null);
-
                 }
             }, 10);
         });
