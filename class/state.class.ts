@@ -4,40 +4,41 @@ import { Slice } from "../model/slice";
 export default class State {
 
     Up = [
-        ['W','W','W'],            
-        ['W','W','W'],
-        ['W','W','W']
-    ]
-
-    Down = [
-        ['Y','Y','Y'],
-        ['Y','Y','Y'],
-        ['Y','Y','Y']
+        ['W', 'W', 'W'],            
+        ['W', 'W', 'W'],
+        ['W', 'W', 'W']
     ];
-
-    Front= [
-        ['G','G','G'],
-        ['G','G','G'],
-        ['G','G','G']
+    
+    Down = [
+        ['Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y'],
+        ['Y', 'Y', 'Y']
+    ];
+    
+    Front = [
+        ['R', 'R', 'R'], // Rouge en face avant
+        ['R', 'R', 'R'],
+        ['R', 'R', 'R']
     ];
 
     Back = [
-        ['B','B','B'],
-        ['B','B','B'],
-        ['B','B','B']
+        ['O', 'O', 'O'], // Orange en face arrière
+        ['O', 'O', 'O'],
+        ['O', 'O', 'O']
     ];
-
+    
     Left = [
-        ['O','O','O'],
-        ['O','O','O'],
-        ['O','O','O']
+        ['B', 'B', 'B'], // Bleu à gauche
+        ['B', 'B', 'B'],
+        ['B', 'B', 'B']
     ];
-
+    
     Right = [
-        ['R','R','R'],
-        ['R','R','R'],
-        ['R','R','R']
+        ['G', 'G', 'G'], // Vert à droite
+        ['G', 'G', 'G'],
+        ['G', 'G', 'G']
     ];
+    
 
     getColoredCubie(cubie: string) {
         switch (cubie) {
@@ -103,13 +104,13 @@ export default class State {
     doMakeRotationByVector(slice: Slice, isClockwise: boolean){
         console.log(slice, isClockwise)
         if (slice.x === -1 && isClockwise) {
-            this.rotateFrontClockwise();
-        } else if (slice.x === -1 && !isClockwise) {
-            this.rotateFrontCounterClockwise();
-        } else if (slice.x === 1 && isClockwise) {
             this.rotateBackClockwise();
         } else if (slice.x === -1 && !isClockwise) {
             this.rotateBackCounterClockwise();
+        } else if (slice.x === 1 && isClockwise) {
+            this.rotateFrontClockwise();
+        } else if (slice.x === 1 && !isClockwise) {
+            this.rotateFrontCounterClockwise();
         } else if (slice.y === 1 && isClockwise) {
             this.rotateRightClockwise();
         } else if (slice.y === 1 && !isClockwise) {
