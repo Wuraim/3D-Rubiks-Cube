@@ -6,7 +6,7 @@ export interface StateSliceAndWise {
     isClockWise: boolean;
 }
 
-function setIdentityVector(mainRotation: THREE.Vector3): void {
+export function setIdentityVector(mainRotation: THREE.Vector3): void {
     mainRotation.y %= 4;
     if (Math.abs(mainRotation.y) > 2) {
         mainRotation.y = -(mainRotation.y % 2);
@@ -18,42 +18,90 @@ function setIdentityVector(mainRotation: THREE.Vector3): void {
     }
 }
 
-function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, slice: Slice){
+export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, slice: Slice){
     switch(mainRotation.y) {
         case 2:
-            // z -> -z
-            slice.z = slice.z ? -slice.z : undefined;
+            if (slice.x) { 
+                // x -> -x
+                slice.x = -slice.x;
+            } else if (slice.z) { 
+                // z -> -z
+                slice.z = -slice.z; 
+            }
             break;
         case 1:
-            // z -> x
-            slice.z = slice.x ? slice.x : undefined;
+            if (slice.x) {
+                // z -> -x
+                slice.z = -slice.x;
+                slice.x = undefined;
+            } else if (slice.z) {
+                // x -> z
+                slice.x = slice.z;
+                slice.z = undefined;
+            }
             break;
         case -1:
-            // z -> -x
-            slice.z = slice.x ? -slice.x : undefined;
+            if (slice.x) {
+                // z -> x
+                slice.z = slice.x;
+                slice.x = undefined;
+            } else if (slice.z) {
+                // x -> -z
+                slice.x = -slice.z;
+                slice.z = undefined;
+            }
             break;
         case -2:
-            // z -> -z
-            slice.z = slice.z ? -slice.z : undefined;
+            if (slice.x) { 
+                // x -> -x
+                slice.x = -slice.x;
+            } else if (slice.z) { 
+                // z -> -z
+                slice.z = -slice.z; 
+            }
            break;
     }
     
     switch(mainRotation.z) {
         case 2:
-            // y -> -y
-            slice.y = slice.y ? -slice.y : undefined;
+            if (slice.x) {
+                // x -> -x
+                slice.x = -slice.x;
+            } else if (slice.y) {
+                // y -> -y
+                slice.y = -slice.y;
+            }
             break;
         case 1:
-            // y -> -x
-            slice.y = slice.x ? -slice.x : undefined;
+            if (slice.x) {
+                // y -> x
+                slice.y = slice.x;
+                slice.x = undefined;
+            } else if (slice.y) {
+                // x -> -y
+                slice.x = -slice.y;
+                slice.y = undefined;
+            }
             break;
         case -1:
-            // y -> x
-            slice.y = slice.x ? slice.x : undefined;
+            if (slice.x) {
+                // y -> -x
+                slice.y = - slice.x;
+                slice.x = undefined;
+            } else if (slice.y) {
+                // x -> y
+                slice.x = slice.y;
+                slice.y = undefined;
+            }
             break;
         case -2:
-            // y -> -y
-            slice.y = slice.y ? -slice.y : undefined;
+            if (slice.x) {
+                // x -> -x
+                slice.x = -slice.x;
+            } else if (slice.y) {
+                // y -> -y
+                slice.y = -slice.y;
+            }
             break;
     }
 }
