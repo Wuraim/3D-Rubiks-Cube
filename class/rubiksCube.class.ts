@@ -145,9 +145,15 @@ export default class RubiksCube {
         }
     }
 
-    getRandomMove() {
-        const randomNumber = Math.floor(Math.random() * allSliceMovement.length);
-        return allSliceMovement[randomNumber];
+    getRandomMove(forbiddenMovement?: SliceMovement) {
+        let pool = allSliceMovement;
+
+        if (forbiddenMovement) {
+            pool = allSliceMovement.filter((sliceMovement) => this.isNotSameAxisRotation(sliceMovement, forbiddenMovement));
+        }
+
+        const randomNumber = Math.floor(Math.random() * pool.length);
+        return pool[randomNumber];
     }
 
     vectorSameAbsValue(vectorA: MovementVector, vectorB: MovementVector) {
@@ -171,9 +177,7 @@ export default class RubiksCube {
             if (allRandomMove.length === 0) {
                 move = this.getRandomMove();
             } else {
-                do {
-                    move = this.getRandomMove();
-                } while (this.isNotSameAxisRotation(move,  allRandomMove[allRandomMove.length - 1]))
+                move = this.getRandomMove(allSliceMovement[allSliceMovement.length - 1])
             }
 
             allRandomMove.push(move);
