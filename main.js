@@ -106,10 +106,10 @@ function getWantedRotation() {
       vector: {x: 0, y: sense, z: 0},
     };
   } else if (areInlineOnAxisField('z')) {
-    const sense = allPointedCube[0].position.y;
+    const sense = allPointedCube[2].position.y;
     result = {  
       slice: {z: allPointedCube[0].position.z},
-      vector: {x: 0, y: 0, z: -sense},
+      vector: {x: 0, y: 0, z: sense},
     };
   }
 

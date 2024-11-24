@@ -62,6 +62,7 @@ export default class RubiksCube {
         // - Traquer chaque rotation compléte
         // - A chaque rotation, conserver la rotation actuellement compléte sur l'axe x, et celle sur l'axe y
         const stateSliceAndWise = getStateSlice(this.mainRotationVector, slice, axis)
+        console.log('slice', stateSliceAndWise.slice, 'wise', stateSliceAndWise.isClockWise)
         this.state.doMakeRotationByVector(stateSliceAndWise.slice, stateSliceAndWise.isClockWise);
 
         await new Promise((resolve) => {
@@ -149,7 +150,9 @@ export default class RubiksCube {
         let pool = allSliceMovement;
 
         if (forbiddenMovement) {
-            pool = allSliceMovement.filter((sliceMovement) => this.isNotSameAxisRotation(sliceMovement, forbiddenMovement));
+            pool = allSliceMovement.filter(
+                (sliceMovement) => !this.isSameAxisRotation(sliceMovement, forbiddenMovement)
+            );
         }
 
         const randomNumber = Math.floor(Math.random() * pool.length);
@@ -164,7 +167,8 @@ export default class RubiksCube {
 
     rotationVector = new THREE.Vector3();
 
-    isNotSameAxisRotation(move: SliceMovement, move2: SliceMovement): boolean {
+    isSameAxisRotation(move: SliceMovement, move2: SliceMovement): boolean {
+        console.log('this.vectorSameAbsValue(move.vector, move2.vector)', move, move2, this.vectorSameAbsValue(move.vector, move2.vector))
         return this.vectorSameAbsValue(move.vector, move2.vector)
     }
 

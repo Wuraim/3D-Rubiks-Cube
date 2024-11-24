@@ -1,5 +1,6 @@
 import { Slice } from "../model/slice";
 import * as THREE from 'three';
+import { isApproximatively } from "./helper";
 
 export interface StateSliceAndWise {
     slice: Slice;
@@ -107,7 +108,7 @@ export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, sl
 }
 
 function isAxisClockwise(axis: THREE.Vector3): boolean {
-    return axis.x === 1 || axis.y === 1 || axis.z === 1;
+    return isApproximatively(axis.x, -1) ||isApproximatively(axis.y, -1) || isApproximatively(axis.z, -1);
 }
 
 export function getStateSlice(mainRotation: THREE.Vector3, slice: Slice, axis: THREE.Vector3): StateSliceAndWise {

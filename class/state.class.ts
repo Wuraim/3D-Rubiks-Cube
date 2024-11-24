@@ -116,9 +116,9 @@ export default class State {
         } else if (slice.y === 1 && !isClockwise) {
             this.rotateRightCounterClockwise();
         } else if (slice.y === -1 && isClockwise) {
-            this.rotateLeftClockwise();
-        } else if (slice.y === -1 && !isClockwise) {
             this.rotateLeftCounterClockwise();
+        } else if (slice.y === -1 && !isClockwise) {
+            this.rotateLeftClockwise();
         } else if (slice.z === 1 && isClockwise) {
             this.rotateUpClockwise();
         } else if (slice.z === 1 && !isClockwise) {

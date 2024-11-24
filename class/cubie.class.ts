@@ -31,9 +31,9 @@ export default class Cubie {
     allColor = [
         '#ff0000',  // Rouge
         '#ff8c00',  // Orange 
-        '#ffffff',  // Blanc
         '#39ff14',  // Vert
         '#0000cd',  // Bleu
+        '#ffffff',  // Blanc
         '#ffff00',  // Jaune
     ];
     
