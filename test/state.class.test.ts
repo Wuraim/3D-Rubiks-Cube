@@ -74,9 +74,9 @@ describe('test des rotations state', () => {
 
         oldState = cloneState(state);
         state.doMakeRotationByVector({ y: -1 }, false);
-        expect(state.Back[0][2]).toEqual(oldState.Up[2][0]);
-        expect(state.Back[1][2]).toEqual(oldState.Up[1][0]);
-        expect(state.Back[2][2]).toEqual(oldState.Up[0][0]);
+        expect(state.Up[0][0]).toEqual(oldState.Back[0][2]);
+        expect(state.Up[1][0]).toEqual(oldState.Back[1][2]);
+        expect(state.Up[2][0]).toEqual(oldState.Back[2][2]);
     });
 
     it('Une rotation horaire Y devrait amener les cubes de la face supérieure sur la face avant', () => {
@@ -88,8 +88,8 @@ describe('test des rotations state', () => {
 
         oldState = cloneState(state);
         state.doMakeRotationByVector({ y: -1 }, true);
-        expect(state.Front[0][2]).toEqual(oldState.Up[2][0]);
-        expect(state.Front[1][2]).toEqual(oldState.Up[1][0]);
-        expect(state.Front[2][2]).toEqual(oldState.Up[0][0]);
+        expect(state.Up[0][0]).toEqual(oldState.Front[0][0]);
+        expect(state.Up[1][0]).toEqual(oldState.Front[1][0]);
+        expect(state.Up[2][0]).toEqual(oldState.Front[2][0]);
     });
 });

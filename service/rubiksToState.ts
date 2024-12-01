@@ -20,6 +20,7 @@ export function setIdentityVector(mainRotation: THREE.Vector3): void {
 }
 
 export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, slice: Slice){
+    // debugger;
     switch(mainRotation.y) {
         case 2:
             if (slice.x) { 
@@ -80,7 +81,7 @@ export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, sl
                 slice.x = undefined;
             } else if (slice.y) {
                 // x -> -y
-                slice.x = -slice.y;
+                slice.x = slice.y;
                 slice.y = undefined;
             }
             break;
@@ -91,7 +92,7 @@ export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, sl
                 slice.x = undefined;
             } else if (slice.y) {
                 // x -> y
-                slice.x = slice.y;
+                slice.x = -slice.y;
                 slice.y = undefined;
             }
             break;
@@ -107,14 +108,22 @@ export function transformSliceBaseOnMainRotation(mainRotation: THREE.Vector3, sl
     }
 }
 
-function isAxisClockwise(axis: THREE.Vector3): boolean {
-    return isApproximatively(axis.x, -1) ||isApproximatively(axis.y, -1) || isApproximatively(axis.z, -1);
+function isAxisClockwise(axis: THREE.Vector3) : boolean {
+    return isApproximatively(axis.x, -1) || isApproximatively(axis.y, -1) || isApproximatively(axis.z, -1);
+}
+
+function sanitizeSlice(slice: Slice): void {
+    slice.x = slice.x ? Math.round(slice.x) : undefined;
+    slice.y = slice.y ? Math.round(slice.y) : undefined;
+    slice.z = slice.z ? Math.round(slice.z) : undefined;
+
 }
 
 export function getStateSlice(mainRotation: THREE.Vector3, slice: Slice, axis: THREE.Vector3): StateSliceAndWise {
     setIdentityVector(mainRotation);
     transformSliceBaseOnMainRotation(mainRotation, slice);
-   
+    sanitizeSlice(slice);
+
     return {
         slice,
         isClockWise: isAxisClockwise(axis),

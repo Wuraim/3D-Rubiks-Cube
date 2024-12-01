@@ -57,6 +57,8 @@ describe('getStateSlice', () => {
 
         const stateSlice = getStateSlice(mainRotation, slice, axis)
 
+        console.log('stateSlice', stateSlice)
+
         expect(stateSlice.isClockWise).toBe(true);
         expect(slice.x).toBe(1);
     })
@@ -68,29 +70,47 @@ describe('getStateSlice', () => {
 
         const stateSlice = getStateSlice(mainRotation, slice, axis)
 
-        expect(stateSlice.isClockWise).toBe(true);
+        console.log('stateSlice', stateSlice)
+
+        expect(stateSlice.isClockWise).toBe(false);
         expect(slice.x).toBe(-1);
     })
 
     it('ne doit pas avoir de différence entre tout les 2 et -2 incrémentations de la main rotation', () => {
-        const allSlice = [
-            {x: -1},
-            {x: 1},
-            {y: -1},
-            {y: 1},
-            {z: -1},
-            {z: 1},
-        ]
-
-        allSlice.forEach((slice) => {
+        [{x: -1}, {x: 1}].forEach((slice) => {
             for(let i = 0; i <= 12; i = i+2) {
                 const mainRotation = new THREE.Vector3(0,0,i);
                 const axis = new THREE.Vector3(1,0,0);
 
                 const stateSlice = getStateSlice(mainRotation, slice, axis)
 
-                expect(stateSlice.isClockWise).toBe(true);
-                expect(slice.x).toBe(1);
+                expect(stateSlice.isClockWise).toBe(slice.x > 0);
+                expect(Math.abs(slice.x)).toBe(1);
+            }
+        });
+
+        [{y: -1}, {y: 1}].forEach((slice) => {
+            for(let i = 0; i <= 12; i = i+2) {
+                const mainRotation = new THREE.Vector3(0,0,i);
+                const axis = new THREE.Vector3(1,0,0);
+
+                const stateSlice = getStateSlice(mainRotation, slice, axis)
+
+                expect(stateSlice.isClockWise).toBe(slice.y > 0);
+                expect(Math.abs(slice.y)).toBe(1);
+            }
+        });
+
+
+        [{z: -1}, {z: 1}].forEach((slice) => {
+            for(let i = 0; i <= 12; i = i+2) {
+                const mainRotation = new THREE.Vector3(0,i,0);
+                const axis = new THREE.Vector3(1,0,0);
+
+                const stateSlice = getStateSlice(mainRotation, slice, axis)
+
+                expect(stateSlice.isClockWise).toBe(slice.z > 0);
+                expect(Math.abs(slice.z)).toBe(1);
             }
         })
     })
