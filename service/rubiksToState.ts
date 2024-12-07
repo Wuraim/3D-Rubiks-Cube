@@ -116,7 +116,6 @@ function sanitizeSlice(slice: Slice): void {
     slice.x = slice.x ? Math.round(slice.x) : undefined;
     slice.y = slice.y ? Math.round(slice.y) : undefined;
     slice.z = slice.z ? Math.round(slice.z) : undefined;
-
 }
 
 export function getStateSlice(mainRotation: THREE.Vector3, slice: Slice, axis: THREE.Vector3): StateSliceAndWise {
