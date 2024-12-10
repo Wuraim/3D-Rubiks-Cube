@@ -4,6 +4,7 @@ import State from './state.class';
 import { allSliceMovement, MovementVector, SliceMovement } from '../rotation';
 import { Slice } from '../model/slice';
 import { getStateSlice } from '../service/rubiksToState';
+import { getLibelleEnum } from '../enum/StateFace.enum';
 
 export default class RubiksCube {
 
@@ -57,13 +58,15 @@ export default class RubiksCube {
         this.isCubeRotating = false;
         this.isSliceRotating = true;
         
+        console.log('this.mainRotationVector', this.mainRotationVector)
+
         // Here, I need to swith form slice with world coordinate to local coordinate
         // Solution 1 :
         // - Traquer chaque rotation compléte
         // - A chaque rotation, conserver la rotation actuellement compléte sur l'axe x, et celle sur l'axe y
         const stateSliceAndWise = getStateSlice(this.mainRotationVector, slice, axis)
-        console.log('slice', stateSliceAndWise.slice, 'wise', stateSliceAndWise.isClockWise)
-        this.state.doMakeRotationByVector(stateSliceAndWise.slice, stateSliceAndWise.isClockWise);
+        console.log('stateFace', getLibelleEnum(stateSliceAndWise.stateFace), 'wise', stateSliceAndWise.isClockWise)
+        this.state.doMakeRotationByVector(stateSliceAndWise.stateFace, stateSliceAndWise.isClockWise);
 
         await new Promise((resolve) => {
             const interval = setInterval(() => {

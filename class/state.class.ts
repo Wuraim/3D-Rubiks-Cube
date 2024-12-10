@@ -1,3 +1,4 @@
+import { StateFace } from "../enum/StateFace.enum";
 import { Face } from "../model/face";
 import { Slice } from "../model/slice";
 
@@ -101,33 +102,34 @@ export default class State {
     }
 
     // Parameters should be faces and boolean for clockwise or not
-    doMakeRotationByVector(slice: Slice, isClockwise: boolean){
-        console.log(slice, isClockwise)
-        if (slice.x === -1 && isClockwise) {
+    doMakeRotationByVector(stateFace: StateFace, isClockwise: boolean){
+        
+        if (StateFace.Back && isClockwise) {
             this.rotateBackClockwise();
-        } else if (slice.x === -1 && !isClockwise) {
+        } else if (StateFace.Back && !isClockwise) {
             this.rotateBackCounterClockwise();
-        } else if (slice.x === 1 && isClockwise) {
+        } else if (StateFace.Front && isClockwise) {
             this.rotateFrontClockwise();
-        } else if (slice.x === 1 && !isClockwise) {
+        } else if (StateFace.Front && !isClockwise) {
             this.rotateFrontCounterClockwise();
-        } else if (slice.y === 1 && isClockwise) {
+        } else if (StateFace.Right && isClockwise) {
             this.rotateRightClockwise();
-        } else if (slice.y === 1 && !isClockwise) {
+        } else if (StateFace.Right && !isClockwise) {
             this.rotateRightCounterClockwise();
-        } else if (slice.y === -1 && isClockwise) {
+        } else if (StateFace.Left && isClockwise) {
             this.rotateLeftCounterClockwise();
-        } else if (slice.y === -1 && !isClockwise) {
+        } else if (StateFace.Left && !isClockwise) {
             this.rotateLeftClockwise();
-        } else if (slice.z === 1 && isClockwise) {
+        } else if (StateFace.Up && isClockwise) {
             this.rotateUpClockwise();
-        } else if (slice.z === 1 && !isClockwise) {
+        } else if (StateFace.Up && !isClockwise) {
             this.rotateUpCounterClockwise();
-        } else if (slice.z === -1 && isClockwise) {
+        } else if (StateFace.Down && isClockwise) {
             this.rotateDownClockwise();
-        } else if (slice.z === -1 && !isClockwise) {
+        } else if (StateFace.Down && !isClockwise) {
             this.rotateDownCounterClockwise();
         }
+        
         this.showState();
     }
 
