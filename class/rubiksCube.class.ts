@@ -3,8 +3,8 @@ import Cubie from './cubie.class';
 import State from './state.class';
 import { allSliceMovement, MovementVector, SliceMovement } from '../rotation';
 import { Slice } from '../model/slice';
-import { getStateSlice } from '../service/rubiksToState';
-import { getLibelleEnum } from '../enum/StateFace.enum';
+import { getStateSlice, FaceStatePositionList } from '../service/rubiksToState';
+import { getLibelleEnum, StateFace } from '../enum/StateFace.enum';
 
 export default class RubiksCube {
 
@@ -51,20 +51,14 @@ export default class RubiksCube {
         });
     }
 
-    listCubies: Array<THREE.Object3D<THREE.Object3DEventMap>> = [];  
+    selectedCubies: Array<Cubie> = [];  
     async rotateSliceUntilOtherSide(slice: Slice, axis: THREE.Vector3) {
-        this.listCubies = this.getAllCubeWhoAreBetween(slice);
+        this.selectedCubies = this.getAllCubeWhoAreBetween(slice);
         this.rotationAxis.copy(axis);
         this.isCubeRotating = false;
         this.isSliceRotating = true;
-        
-        console.log('this.mainRotationVector', this.mainRotationVector)
 
-        // Here, I need to swith form slice with world coordinate to local coordinate
-        // Solution 1 :
-        // - Traquer chaque rotation compléte
-        // - A chaque rotation, conserver la rotation actuellement compléte sur l'axe x, et celle sur l'axe y
-        const stateSliceAndWise = getStateSlice(this.mainRotationVector, slice, axis)
+        const stateSliceAndWise = getStateSlice(this.selectedCubies, slice, axis)
         console.log('stateFace', getLibelleEnum(stateSliceAndWise.stateFace), 'wise', stateSliceAndWise.isClockWise)
         this.state.doMakeRotationByVector(stateSliceAndWise.stateFace, stateSliceAndWise.isClockWise);
 
@@ -78,17 +72,17 @@ export default class RubiksCube {
         });
     }
 
-    getAllCubeWhoAreBetween({x,y,z}: Partial<Slice>): Array<THREE.Object3D<THREE.Object3DEventMap>> {
-        const result: Array<THREE.Object3D<THREE.Object3DEventMap>> = [];
-        this.group.children.forEach((cube) => {
-          const position = cube.position;
+    getAllCubeWhoAreBetween({x,y,z}: Partial<Slice>): Array<Cubie> {
+        const result: Array<Cubie> = [];
+        this.allCubies.forEach((cubie) => {
+          const position = cubie.mesh?.position as THREE.Vector3;
       
           const isOkX = x !== undefined ? x - 0.1 < position.x && position.x < x + 0.1 : false;
           const isOkY = y !== undefined ? y - 0.1 < position.y && position.y < y + 0.1 : false;
           const isOkZ = z !== undefined ? z - 0.1 < position.z && position.z < z + 0.1 : false;
       
           if (isOkX || isOkY || isOkZ) {
-            result.push(cube);
+            result.push(cubie);
           }
         })
       
@@ -125,9 +119,9 @@ export default class RubiksCube {
                         cube.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
                     })
                 } else if (this.isSliceRotating) {
-                    this.listCubies.forEach((cube) => {
-                        cube.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
-                        cube.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
+                    this.selectedCubies.forEach((cubie) => {
+                        cubie.mesh?.position.applyAxisAngle(this.rotationAxis, rotationPerFrame);
+                        cubie.mesh?.rotateOnWorldAxis(this.rotationAxis, rotationPerFrame);
                     })
                 }
 
@@ -136,7 +130,7 @@ export default class RubiksCube {
 
             if (this.targetRotation <= 0) {
                 if (this.isSliceRotating) {
-                    this.listCubies = [];
+                    this.selectedCubies = [];
                 }
 
                 this.isCubeRotating = false;

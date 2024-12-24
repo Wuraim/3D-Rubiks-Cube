@@ -58,7 +58,8 @@ let isMouseDown = false;
 function getPointedCubie() {
   let result = null;
   raycaster.setFromCamera(pointer, camera);
-  const intersects = raycaster.intersectObjects(rubiks.getFrontSlice());
+  const frontCubeMesh = rubiks.getFrontSlice().map((cubie) => cubie.mesh);
+  const intersects = raycaster.intersectObjects(frontCubeMesh);
   if (intersects[0]) {
     result = intersects[0].object;
   }

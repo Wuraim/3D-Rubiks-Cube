@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { getLibelleEnum, StateFace } from '../enum/StateFace.enum';
+import { getStateFaceCoreFromPos } from '../service/rubiksToState';
 
 function createBorderedTexture(color: string) {
     const size = 256;  // Taille de la texture
@@ -27,6 +29,7 @@ function createBorderedTexture(color: string) {
 export default class Cubie {
     static cubeSize: number = 1;
     mesh: THREE.Mesh | null = null;
+    core: StateFace | null = null;
 
     allColor = [
         '#ff0000',  // Rouge
@@ -56,6 +59,7 @@ export default class Cubie {
         const geometry = new THREE.BoxGeometry(Cubie.cubeSize, Cubie.cubeSize, Cubie.cubeSize);
         this.mesh = new THREE.Mesh(geometry, this.materials);
         this.mesh.position.set(x, y, z);
+        this.core = getStateFaceCoreFromPos(x, y, z);
     }
 
     displayAsDefault() {
