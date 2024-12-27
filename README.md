@@ -5,7 +5,6 @@ Le but de ce repo est de tester la librairie three.js et de faire un rubiks cube
 TODO:
 - Lancer cette fonction à chaque changement de position et garder le résultat dans une variable
 - Afficher des boutons pour la remise à zéro, l'auto-résolution et l'auto mélange
-- Afficher la console dans la fenêtre
 - Tester et corriger les test de résolution
 
 Solution :
