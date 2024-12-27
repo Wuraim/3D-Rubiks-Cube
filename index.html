@@ -10,9 +10,15 @@
 			<div id="rendererFrame" class="w-1/2">
 	
 			</div>
-			<div class="bg-black text-green-500 flex items-center justify-center h-screen w-1/2">
-				<div id="terminal" class="w-11/12 h-4/5 bg-black text-green-500 border border-green-500 p-4 overflow-y-auto whitespace-pre-wrap font-mono">
-				  <!-- Logs s'afficheront ici -->
+			<div class="bg-black text-green-500 flex items-center justify-center h-screen w-1/2 ">
+				<div class="mx-4 h-[95%] w-full bg-black text-green-500 border border-green-500 p-4 whitespace-pre-wrap font-mono flex flex-col justify-between gap-4">
+				  	<div id="terminal" class="overflow-y-auto">
+				  	</div>
+					<div class="flex flex-row gap-4">
+						<button id="shuffle" class="border border-green-500 p-4 hover:border-green-300 hover:text-green-300">Mélanger</button>
+						<button id="restart" class="border border-green-500 p-4 hover:border-green-300 hover:text-green-300">Recommencer</button>
+						<button id="resolved" class="border border-green-500 p-4 hover:border-green-300 hover:text-green-300">Résoudre</button>
+					</div>
 				</div>
 			</div>
 		</div>
