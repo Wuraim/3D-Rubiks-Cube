@@ -1,15 +1,16 @@
 import * as THREE from 'three';
 import RubiksCube from './class/rubiksCube.class.ts';
+import './service/terminal.ts';
 
 import { allRubiksMovement } from './rotation';
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 const renderer = new THREE.WebGLRenderer();
 const rendererFrame = document.querySelector('#rendererFrame');
 
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
 
 const rubiks = new RubiksCube();
 const raycaster = new THREE.Raycaster();
@@ -140,11 +141,23 @@ async function addPointedCube(cube) {
   }
 }
 
+function normalizePointer(event, canvas) {
+  const rect = canvas.getBoundingClientRect();
+  return {
+    x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
+    y: -((event.clientY - rect.top) / rect.height) * 2 + 1,
+  };
+}
+
 async function onPointerMove(event) {
   if (!isMouseDown) return;  // Ne fonctionne que lorsque le bouton gauche est maintenu
 
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
   pointer.y = - (event.clientY / window.innerHeight) * 2 + 1;
+
+  const normalized = normalizePointer(event, renderer.domElement);
+  pointer.x = normalized.x;
+  pointer.y = normalized.y;
 
   const pointedCubie = getPointedCubie();
 

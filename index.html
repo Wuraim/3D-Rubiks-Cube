@@ -3,16 +3,20 @@
 	<head>
 		<meta charset="utf-8">
 		<title>My first three.js app</title>
-		<style>
-			body { margin: 0; }
-		</style>
+		<link rel="stylesheet" href="/style.css">
 	</head>
-	<body style="margin: 0; height: 100%; overflow: hidden;">
-		<div style="display: flex; flex-direction: row; justify-content:center; align-items: center;">
-			<div id="rendererFrame">
+	<body class="m-0 h-full overflow-hidden">
+		<div class="flex flex-row items-center bg-black">
+			<div id="rendererFrame" class="w-1/2">
 	
 			</div>
+			<div class="bg-black text-green-500 flex items-center justify-center h-screen w-1/2">
+				<div id="terminal" class="w-11/12 h-4/5 bg-black text-green-500 border border-green-500 p-4 overflow-y-auto whitespace-pre-wrap font-mono">
+				  <!-- Logs s'afficheront ici -->
+				</div>
+			</div>
 		</div>
+		
 		
 		<script type="module" src="/main.js"></script>
 	</body>
