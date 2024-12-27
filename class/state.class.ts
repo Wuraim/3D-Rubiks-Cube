@@ -45,6 +45,10 @@ export default class State {
         ['G', 'G', 'G'],
         ['G', 'G', 'G']
     ];
+
+    constructor() {
+        this.showState();
+    }
     
 
     getColoredCubie(cubie: string) {
@@ -99,7 +103,6 @@ export default class State {
         let thirdRowOfDisplay = [this.getSpaceDisplay(), this.getFaceDisplay(this.Down)]
         let thirdRow = thirdRowOfDisplay.reduce((acc, val) => this.concatFaceDisplay(acc,val))
 
-        console.log(new Date())
         console.log('')
         this.logDisplay(firstRow)
         this.logDisplay(secondRow)
