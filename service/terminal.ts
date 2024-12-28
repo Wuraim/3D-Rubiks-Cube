@@ -40,3 +40,8 @@ function addLog(message: string): void {
     originalMethod.apply(console, args);
   };
 });
+
+export function clearLog(): void {
+  terminal.innerHTML = '';
+  console.clear();
+}

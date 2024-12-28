@@ -3,6 +3,7 @@ import RubiksCube from './class/rubiksCube.class.js';
 import './service/terminal.js';
 
 import { allRubiksMovement } from './rotation.js';
+import { clearLog } from './service/terminal.js';
 
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -203,6 +204,8 @@ async function onClickRestart(){
 
   scene.add(rubiks.group);
   scene.add( axesHelper );
+
+  clearLog();
 }
 
 async function onClickResolved() {
