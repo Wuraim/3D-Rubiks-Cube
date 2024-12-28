@@ -165,7 +165,6 @@ export default class RubiksCube {
     rotationVector = new THREE.Vector3();
 
     isSameAxisRotation(move: SliceMovement, move2: SliceMovement): boolean {
-        console.log('this.vectorSameAbsValue(move.vector, move2.vector)', move, move2, this.vectorSameAbsValue(move.vector, move2.vector))
         return this.vectorSameAbsValue(move.vector, move2.vector)
     }
 

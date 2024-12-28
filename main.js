@@ -179,3 +179,39 @@ function onMouseUp(event) {
 window.addEventListener('mousedown', onMouseDown);
 window.addEventListener('mouseup', onMouseUp);
 window.addEventListener('mousemove', onPointerMove);
+
+const shuffleButton = document.querySelector('#shuffle');
+const restartButton = document.querySelector('#restart');
+const resolvedButton = document.querySelector('#resolved');
+
+async function onClickShuffle(){
+  await rubiks.shuffleTimes(30);
+}
+
+async function onClickRestart(){
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+  
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
+  
+  rubiks = new RubiksCube();
+  raycaster = new THREE.Raycaster();
+  pointer = new THREE.Vector2(999, 999);
+  
+  renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
+  rendererFrame.appendChild(renderer.domElement);
+  
+  scene.add(rubiks.group);
+  
+  const axesHelper = new THREE.AxesHelper( 2 );
+  scene.add( axesHelper );  
+}
+
+async function onClickResolved() {
+  console.log('Not implemented yet');
+}
+
+shuffleButton.addEventListener('click', onClickShuffle);
+restartButton.addEventListener('click', onClickRestart);
+resolvedButton.addEventListener('click', onClickResolved);
