@@ -73,8 +73,8 @@ function isApproximatively(a : number, b : number) {
   return a > b - 0.1 && a < b + 0.1;
 }
 
-function areInlineOnAxisField(axisField: 'x' | 'y' | 'z') {
-  let result = null;
+function areInlineOnAxisField(axisField: 'x' | 'y' | 'z'): boolean {
+  let result = true;
   
   if(allPointedCube.length >= 2) {
     for(let i = 0; i < allPointedCube.length - 1; i++) {
@@ -94,7 +94,7 @@ function areInlineOnAxisField(axisField: 'x' | 'y' | 'z') {
   return result;
 }
 
-function areInline(){
+function areInline(): boolean {
   return areInlineOnAxisField('y') || areInlineOnAxisField('z');
 }
 
