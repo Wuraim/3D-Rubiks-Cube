@@ -4,17 +4,17 @@ import './service/terminal.ts';
 
 import { allRubiksMovement } from './rotation';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-const renderer = new THREE.WebGLRenderer();
-const rendererFrame = document.querySelector('#rendererFrame');
+let renderer = new THREE.WebGLRenderer();
+let rendererFrame = document.querySelector('#rendererFrame');
 
 renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
 
-const rubiks = new RubiksCube();
-const raycaster = new THREE.Raycaster();
-const pointer = new THREE.Vector2(999, 999);
+let rubiks = new RubiksCube();
+let raycaster = new THREE.Raycaster();
+let pointer = new THREE.Vector2(999, 999);
 
 renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
 rendererFrame.appendChild(renderer.domElement);
@@ -189,23 +189,18 @@ async function onClickShuffle(){
 }
 
 async function onClickRestart(){
+  rendererFrame.removeChild(renderer.domElement);
+
   scene = new THREE.Scene();
-  camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
-  
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
-  
   rubiks = new RubiksCube();
-  raycaster = new THREE.Raycaster();
-  pointer = new THREE.Vector2(999, 999);
-  
   renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
   rendererFrame.appendChild(renderer.domElement);
-  
+
   scene.add(rubiks.group);
-  
-  const axesHelper = new THREE.AxesHelper( 2 );
-  scene.add( axesHelper );  
+
+  scene.add( axesHelper );
 }
 
 async function onClickResolved() {
