@@ -1,14 +1,14 @@
 import * as THREE from 'three';
-import RubiksCube from './class/rubiksCube.class.ts';
-import './service/terminal.ts';
+import RubiksCube from './class/rubiksCube.class.js';
+import './service/terminal.js';
 
-import { allRubiksMovement } from './rotation';
+import { allRubiksMovement } from './rotation.js';
 
 let scene = new THREE.Scene();
 let camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 0.1, 1000);
 
 let renderer = new THREE.WebGLRenderer();
-let rendererFrame = document.querySelector('#rendererFrame');
+let rendererFrame = document.querySelector('#rendererFrame')!;
 
 renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
 
@@ -16,7 +16,7 @@ let rubiks = new RubiksCube();
 let raycaster = new THREE.Raycaster();
 let pointer = new THREE.Vector2(999, 999);
 
-renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
+renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera));
 rendererFrame.appendChild(renderer.domElement);
 
 scene.add(rubiks.group);
@@ -56,10 +56,10 @@ window.addEventListener('resize', () => {
 });
 
 let isMouseDown = false;
-function getPointedCubie() {
+function getPointedCubie(): THREE.Object3D<THREE.Object3DEventMap> | null {
   let result = null;
   raycaster.setFromCamera(pointer, camera);
-  const frontCubeMesh = rubiks.getFrontSlice().map((cubie) => cubie.mesh);
+  const frontCubeMesh: THREE.Object3D[] = rubiks.getFrontSlice().map((cubie) => cubie.mesh!);
   const intersects = raycaster.intersectObjects(frontCubeMesh);
   if (intersects[0]) {
     result = intersects[0].object;
@@ -67,13 +67,13 @@ function getPointedCubie() {
   return result;
 }
 
-let allPointedCube = []
+let allPointedCube: Array<THREE.Object3D<THREE.Object3DEventMap>> = []
 
-function isApproximatively(a,b) {
+function isApproximatively(a : number, b : number) {
   return a > b - 0.1 && a < b + 0.1;
 }
 
-function areInlineOnAxisField(axisField) {
+function areInlineOnAxisField(axisField: 'x' | 'y' | 'z') {
   let result = null;
   
   if(allPointedCube.length >= 2) {
@@ -118,8 +118,8 @@ function getWantedRotation() {
   return result;
 }
 
-async function addPointedCube(cube) {
-  if (cube && !allPointedCube.includes(cube)) {
+async function addPointedCube(cube: THREE.Object3D<THREE.Object3DEventMap>) {
+  if (!allPointedCube.includes(cube)) {
     allPointedCube.push(cube);
 
     if(allPointedCube.length > 1) {
@@ -130,8 +130,10 @@ async function addPointedCube(cube) {
       } else if (allPointedCube.length === 3 && inlined) {
         
         const move = getWantedRotation();
-        rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
-        await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
+        if(move) {
+          rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
+          await rubiks.rotateSliceUntilOtherSide(move.slice, rotationVector);
+        }
       }
     }
 
@@ -141,7 +143,7 @@ async function addPointedCube(cube) {
   }
 }
 
-function normalizePointer(event, canvas) {
+function normalizePointer(event: MouseEvent, canvas: HTMLCanvasElement) {
   const rect = canvas.getBoundingClientRect();
   return {
     x: ((event.clientX - rect.left) / rect.width) * 2 - 1,
@@ -149,7 +151,7 @@ function normalizePointer(event, canvas) {
   };
 }
 
-async function onPointerMove(event) {
+async function onPointerMove(event: MouseEvent) {
   if (!isMouseDown) return;  // Ne fonctionne que lorsque le bouton gauche est maintenu
 
   pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -160,17 +162,18 @@ async function onPointerMove(event) {
   pointer.y = normalized.y;
 
   const pointedCubie = getPointedCubie();
-
-  await addPointedCube(pointedCubie)
+  if (pointedCubie) {
+    await addPointedCube(pointedCubie)
+  }
 }
 
-function onMouseDown(event) {
+function onMouseDown(event: MouseEvent) {
   if (event.button === 0) {  // Vérifie si le bouton gauche de la souris est enfoncé
     isMouseDown = true;
   }
 }
 
-function onMouseUp(event) {
+function onMouseUp(event: MouseEvent) {
   if (event.button === 0) {  // Vérifie si le bouton gauche de la souris est relâché
     isMouseDown = false;
   }
@@ -180,9 +183,9 @@ window.addEventListener('mousedown', onMouseDown);
 window.addEventListener('mouseup', onMouseUp);
 window.addEventListener('mousemove', onPointerMove);
 
-const shuffleButton = document.querySelector('#shuffle');
-const restartButton = document.querySelector('#restart');
-const resolvedButton = document.querySelector('#resolved');
+const shuffleButton = document.querySelector('#shuffle')!;
+const restartButton = document.querySelector('#restart')!;
+const resolvedButton = document.querySelector('#resolved')!;
 
 async function onClickShuffle(){
   await rubiks.shuffleTimes(30);
@@ -195,11 +198,10 @@ async function onClickRestart(){
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(window.innerWidth / 2, window.innerHeight / 2);
   rubiks = new RubiksCube();
-  renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera, pointer, raycaster));
+  renderer.setAnimationLoop(rubiks.getAnimation(renderer, scene, camera));
   rendererFrame.appendChild(renderer.domElement);
 
   scene.add(rubiks.group);
-
   scene.add( axesHelper );
 }
 
