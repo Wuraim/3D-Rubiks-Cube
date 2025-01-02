@@ -1,11 +1,12 @@
 import { StateFace } from "../enum/StateFace.enum";
 import { Face } from "../model/face";
 import { Slice } from "../model/slice";
+import CubeJS from 'cubejs';
 
 interface StateFaceRotation {
     stateFace: StateFace;
     clockwise: boolean;
-    fnRotation: () => void;
+    solverRotation: string;
 }
 
 export default class State {
@@ -46,6 +47,8 @@ export default class State {
         ['G', 'G', 'G']
     ];
 
+    cubeSolver = new CubeJS();
+
     constructor() {
         this.showState();
     }
@@ -53,12 +56,12 @@ export default class State {
 
     getColoredCubie(cubie: string) {
         switch (cubie) {
-            case 'W': return '\x1b[37mW\x1b[0m';
-            case 'Y': return '\x1b[33mY\x1b[0m';
-            case 'G': return '\x1b[32mG\x1b[0m';
-            case 'B': return '\x1b[34mB\x1b[0m';
-            case 'O': return '\x1b[35mO\x1b[0m';
-            case 'R': return '\x1b[31mR\x1b[0m';
+            case 'U': return '\x1b[37mW\x1b[0m';
+            case 'D': return '\x1b[33mY\x1b[0m';
+            case 'R': return '\x1b[32mG\x1b[0m';
+            case 'L': return '\x1b[34mB\x1b[0m';
+            case 'B': return '\x1b[35mO\x1b[0m';
+            case 'F': return '\x1b[31mR\x1b[0m';
         }
     }
 
@@ -94,6 +97,11 @@ export default class State {
     }
 
     showState(){
+        /*
+        
+
+        const faceUp = solverState.substring(0,9)
+
         let firstRowOfDisplay = [this.getSpaceDisplay(), this.getFaceDisplay(this.Up)]
         let firstRow = firstRowOfDisplay.reduce((acc, val) => this.concatFaceDisplay(acc,val))
 
@@ -108,22 +116,25 @@ export default class State {
         this.logDisplay(secondRow)
         this.logDisplay(thirdRow)
         console.log('')
+        */
+        const solverState: string = this.cubeSolver.asString();
+        console.log(solverState)
     }
 
     rotation: Array<StateFaceRotation> = [
-        { stateFace: StateFace.Up, clockwise: true, fnRotation: this.rotateUpClockwise },
-        { stateFace: StateFace.Down, clockwise: true, fnRotation: this.rotateDownClockwise },
-        { stateFace: StateFace.Left, clockwise: true, fnRotation: this.rotateLeftClockwise },
-        { stateFace: StateFace.Right, clockwise: true, fnRotation: this.rotateRightClockwise },
-        { stateFace: StateFace.Front, clockwise: true, fnRotation: this.rotateFrontClockwise },
-        { stateFace: StateFace.Back, clockwise: true, fnRotation: this.rotateBackClockwise },
+        { stateFace: StateFace.Up, clockwise: true, solverRotation: "U" },
+        { stateFace: StateFace.Down, clockwise: true, solverRotation: "D" },
+        { stateFace: StateFace.Left, clockwise: true, solverRotation: "L" },
+        { stateFace: StateFace.Right, clockwise: true, solverRotation: "R" },
+        { stateFace: StateFace.Front, clockwise: true, solverRotation: "F" },
+        { stateFace: StateFace.Back, clockwise: true, solverRotation: "B" },
     
-        { stateFace: StateFace.Up, clockwise: false, fnRotation: this.rotateUpCounterClockwise },
-        { stateFace: StateFace.Down, clockwise: false, fnRotation: this.rotateDownCounterClockwise },
-        { stateFace: StateFace.Left, clockwise: false, fnRotation: this.rotateLeftCounterClockwise },
-        { stateFace: StateFace.Right, clockwise: false, fnRotation: this.rotateRightCounterClockwise },
-        { stateFace: StateFace.Front, clockwise: false, fnRotation: this.rotateFrontCounterClockwise },
-        { stateFace: StateFace.Back, clockwise: false, fnRotation: this.rotateBackCounterClockwise },
+        { stateFace: StateFace.Up, clockwise: false, solverRotation: "U'" },
+        { stateFace: StateFace.Down, clockwise: false, solverRotation: "D'" },
+        { stateFace: StateFace.Left, clockwise: false, solverRotation: "L'" },
+        { stateFace: StateFace.Right, clockwise: false, solverRotation: "R'" },
+        { stateFace: StateFace.Front, clockwise: false, solverRotation: "F'" },
+        { stateFace: StateFace.Back, clockwise: false, solverRotation: "B'" },
     ];
     
     doMakeRotationByVector(stateFace: StateFace, isClockwise: boolean) {
@@ -131,8 +142,8 @@ export default class State {
             (rot) => rot.stateFace === stateFace && rot.clockwise === isClockwise
         );
     
-        if (rotation && rotation.fnRotation) {
-            rotation.fnRotation.call(this);
+        if (rotation && rotation.solverRotation) {
+            this.cubeSolver.move(rotation.solverRotation);
         } else {
             console.warn(`Rotation non définie pour face: ${stateFace}, sens horaire: ${isClockwise}`);
         }
@@ -350,7 +361,6 @@ export default class State {
             this.Down[i][2] = frontCol[i];
             this.Back[2 - i][0] = downCol[i]
         }
-    }
-    
+    }  
     
 }

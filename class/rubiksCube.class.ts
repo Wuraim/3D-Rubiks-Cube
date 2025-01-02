@@ -32,6 +32,7 @@ export default class RubiksCube {
         }
 
         this.group = rubiks;
+        
     }
 
     mainRotationVector = new THREE.Vector3(0,0,0);
