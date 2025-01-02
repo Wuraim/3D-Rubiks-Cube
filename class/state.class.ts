@@ -74,7 +74,7 @@ export default class State {
             }
             result.push(line);
         }
-        console.log(start, result)
+        
         return result;
     }
 
