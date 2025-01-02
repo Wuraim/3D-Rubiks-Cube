@@ -119,7 +119,7 @@ function getWantedRotation() {
   return result;
 }
 
-async function addPointedCube(cube: THREE.Object3D<THREE.Object3DEventMap>) {
+async function addPointedCube(cube: THREE.Object3D<THREE.Object3DEventMap>): Promise<void> {
   if (!allPointedCube.includes(cube)) {
     allPointedCube.push(cube);
 
