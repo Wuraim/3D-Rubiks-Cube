@@ -203,7 +203,7 @@ async function onClickRestart(){
   rendererFrame.appendChild(renderer.domElement);
 
   scene.add(rubiks.group);
-  scene.add( axesHelper );
+  scene.add(axesHelper);
 
   clearLog();
 }
