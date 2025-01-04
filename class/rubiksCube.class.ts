@@ -211,14 +211,19 @@ export default class RubiksCube {
     }
 
     async resolve(): Promise<void> {
-        const result = await this.state.solve();
-        // Il faut ensuite faire les mouvements ici
-        for (const stateRotation of result) {
-            const slice = this.getSliceFromStateRotation(stateRotation);
-            const axis = getAxisRotation(slice, isStateRotationClockwise(stateRotation));
-
-            await this.rotateSliceUntilOtherSide(slice, axis);
-            if (isStateRotationDouble(stateRotation)) await this.rotateSliceUntilOtherSide(slice, axis);
+        if(this.state.cubeSolver.isSolved()) {
+            console.log('Already solved')
+        } else {
+            const result = await this.state.solve();
+            // Il faut ensuite faire les mouvements ici
+            for (const stateRotation of result) {
+                const slice = this.getSliceFromStateRotation(stateRotation);
+                const axis = getAxisRotation(slice, isStateRotationClockwise(stateRotation));
+    
+                await this.rotateSliceUntilOtherSide(slice, axis);
+                if (isStateRotationDouble(stateRotation)) await this.rotateSliceUntilOtherSide(slice, axis);
+            }
         }
+        
     }
 }
