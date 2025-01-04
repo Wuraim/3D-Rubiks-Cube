@@ -58,6 +58,21 @@ function isRotationClockwise(slice: Slice, axis: THREE.Vector3) : boolean {
     return isOppositeRotation ? someDimensionEqual(axis, -1) : someDimensionEqual(axis, 1);
 }
 
+function createAxisFromSlice(slice: Slice, isOppositeRotation: boolean, isClockWise: boolean): THREE.Vector3 {
+    const isOpposed = (isOppositeRotation && !isClockWise) || (!isOppositeRotation && isClockWise);
+
+    const x = slice.x ? isClockWise ? -slice.x : slice.x : 0;
+    const y = slice.y ? isClockWise ? -slice.y : slice.y : 0;
+    const z = slice.z ? isClockWise ? -slice.z : slice.z : 0;
+
+    return new THREE.Vector3(x, y, z);
+}
+
+export function getAxisRotation(slice: Slice, isClockWise: boolean): THREE.Vector3 {
+    const isOppositeRotation: boolean = someDimensionEqual(slice, 1);
+    return createAxisFromSlice(slice, isOppositeRotation, isClockWise);
+}
+
 function sanitizeSliceOrVector(obj: Slice | THREE.Vector3): Slice | THREE.Vector3 {
     obj.x = obj.x ? Math.round(obj.x) : undefined;
     obj.y = obj.y ? Math.round(obj.y) : undefined;

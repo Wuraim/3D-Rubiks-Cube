@@ -3,8 +3,9 @@ import Cubie from './cubie.class';
 import State from './state.class';
 import { allSliceMovement, MovementVector, SliceMovement } from '../rotation';
 import { Slice } from '../model/slice';
-import { getStateSlice, FaceStatePositionList } from '../service/rubiksToState';
-import { getLibelleEnum, StateFace } from '../enum/StateFace.enum';
+import { getStateSlice, getAxisRotation } from '../service/rubiksToState';
+import { StateFace } from '../enum/StateFace.enum';
+import { isStateRotationClockwise, isStateRotationDouble, StateRotation, stateRotationWithSlice } from '../enum/StateRotation.enum';
 
 export default class RubiksCube {
 
@@ -60,7 +61,6 @@ export default class RubiksCube {
         this.isSliceRotating = true;
 
         const stateSliceAndWise = getStateSlice(this.selectedCubies, slice, axis)
-        console.log('stateFace', getLibelleEnum(stateSliceAndWise.stateFace), 'wise', stateSliceAndWise.isClockWise)
         this.state.doMakeRotationByVector(stateSliceAndWise.stateFace, stateSliceAndWise.isClockWise);
 
         await new Promise((resolve) => {
@@ -184,6 +184,41 @@ export default class RubiksCube {
             allRandomMove.push(move);
             this.rotationVector.set(move.vector.x, move.vector.y, move.vector.z);
             await this.rotateSliceUntilOtherSide(move.slice, this.rotationVector);
+        }
+    }
+
+    getStateFaceFromStateRotation(stateRotation: StateRotation): StateFace {
+        return stateRotationWithSlice.find((sub) => sub.stateRotations.includes(stateRotation))!.stateFace;
+    }
+
+    getSliceFromCentralCubie(cubie: Cubie): Slice {
+        const pos = cubie.mesh!.position;
+        const x = Math.round(pos.x) === 0 ? undefined : Math.round(pos.x); 
+        const y = Math.round(pos.y) === 0 ? undefined : Math.round(pos.y); 
+        const z = Math.round(pos.z) === 0 ? undefined : Math.round(pos.z);
+
+        return {x, y, z};
+    }
+
+    getSliceFromStateFace(stateFace: StateFace): Slice {
+        const centralCubie: Cubie = this.allCubies.find((cubie) => cubie.core === stateFace)!;
+        return this.getSliceFromCentralCubie(centralCubie);
+    }
+
+    getSliceFromStateRotation(stateRotation: StateRotation): Slice {
+        const stateFace = this.getStateFaceFromStateRotation(stateRotation);
+        return this.getSliceFromStateFace(stateFace);
+    }
+
+    async resolve(): Promise<void> {
+        const result = await this.state.solve();
+        // Il faut ensuite faire les mouvements ici
+        for (const stateRotation of result) {
+            const slice = this.getSliceFromStateRotation(stateRotation);
+            const axis = getAxisRotation(slice, isStateRotationClockwise(stateRotation));
+
+            await this.rotateSliceUntilOtherSide(slice, axis);
+            if (isStateRotationDouble(stateRotation)) await this.rotateSliceUntilOtherSide(slice, axis);
         }
     }
 }

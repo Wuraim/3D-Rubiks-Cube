@@ -1,12 +1,12 @@
 import { StateFace } from "../enum/StateFace.enum";
+import { StateRotation } from "../enum/StateRotation.enum";
 import { Face } from "../model/face";
-import { Slice } from "../model/slice";
 import CubeJS from 'cubejs';
 
 interface StateFaceRotation {
     stateFace: StateFace;
     clockwise: boolean;
-    solverRotation: string;
+    solverRotation: StateRotation;
 }
 
 export default class State {
@@ -96,19 +96,19 @@ export default class State {
     }
 
     rotation: Array<StateFaceRotation> = [
-        { stateFace: StateFace.Up, clockwise: true, solverRotation: "U" },
-        { stateFace: StateFace.Down, clockwise: true, solverRotation: "D" },
-        { stateFace: StateFace.Left, clockwise: true, solverRotation: "L" },
-        { stateFace: StateFace.Right, clockwise: true, solverRotation: "R" },
-        { stateFace: StateFace.Front, clockwise: true, solverRotation: "F" },
-        { stateFace: StateFace.Back, clockwise: true, solverRotation: "B" },
+        { stateFace: StateFace.Up, clockwise: true, solverRotation: StateRotation.U },
+        { stateFace: StateFace.Down, clockwise: true, solverRotation: StateRotation.D },
+        { stateFace: StateFace.Left, clockwise: true, solverRotation: StateRotation.L },
+        { stateFace: StateFace.Right, clockwise: true, solverRotation: StateRotation.R },
+        { stateFace: StateFace.Front, clockwise: true, solverRotation: StateRotation.F },
+        { stateFace: StateFace.Back, clockwise: true, solverRotation: StateRotation.B },
     
-        { stateFace: StateFace.Up, clockwise: false, solverRotation: "U'" },
-        { stateFace: StateFace.Down, clockwise: false, solverRotation: "D'" },
-        { stateFace: StateFace.Left, clockwise: false, solverRotation: "L'" },
-        { stateFace: StateFace.Right, clockwise: false, solverRotation: "R'" },
-        { stateFace: StateFace.Front, clockwise: false, solverRotation: "F'" },
-        { stateFace: StateFace.Back, clockwise: false, solverRotation: "B'" },
+        { stateFace: StateFace.Up, clockwise: false, solverRotation: StateRotation.Ubis },
+        { stateFace: StateFace.Down, clockwise: false, solverRotation: StateRotation.Dbis },
+        { stateFace: StateFace.Left, clockwise: false, solverRotation: StateRotation.Lbis },
+        { stateFace: StateFace.Right, clockwise: false, solverRotation: StateRotation.Rbis },
+        { stateFace: StateFace.Front, clockwise: false, solverRotation: StateRotation.Fbis },
+        { stateFace: StateFace.Back, clockwise: false, solverRotation: StateRotation.Bbis },
     ];
     
     doMakeRotationByVector(stateFace: StateFace, isClockwise: boolean) {
@@ -123,6 +123,11 @@ export default class State {
         }
     
         this.showState();
+    }
+
+    async solve(): Promise<Array<StateRotation>> {
+        await CubeJS.initSolver();
+        return this.cubeSolver.solve().split(' ') as Array<StateRotation>;
     }
     
 }

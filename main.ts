@@ -209,7 +209,7 @@ async function onClickRestart(){
 }
 
 async function onClickResolved() {
-  console.log('Not implemented yet');
+  await rubiks.resolve();
 }
 
 shuffleButton.addEventListener('click', onClickShuffle);
