@@ -1,0 +1,185 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Rubiks Cube</title>
+    <link
+      rel="icon"
+      sizes="16x16"
+      href="favicon/favicon-16.png"
+      type="image/png"
+    />
+    <link
+      rel="icon"
+      sizes="32x32"
+      href="favicon/favicon-32.png"
+      type="image/png"
+    />
+    <link
+      rel="icon"
+      sizes="96x96"
+      href="favicon/favicon-96.png"
+      type="image/png"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body class="m-0 text-white m-0 text-white lg:min-h-screen lg:flex lg:items-center">
+    <div class="flex flex-col bg-black lg:bg-white lg:max-w-[1024px] lg:mx-auto gap-16">
+      <div class="flex flex-col lg:flex-row h-dvh lg:h-fit justify-between lg:justify-center lg:gap-8 items-center">
+        <div class="flex lg:hidden flex-row items-center justify-center gap-4 h-16 my-4">
+          <a
+            class="text-decoration-none"
+            href="https://github.com/Wuraim/three-js-tuto"
+          >
+            <div class="border h-12 flex flex-row gap-2 p-2 items-center rounded-lg">
+              <img src="github-mark-white.svg" class="h-full w-full" />
+              <span class="font-bold">GitHub</span>
+            </div>
+          </a>
+
+          <a
+            class="text-decoration-none"
+            href="https://www.linkedin.com/in/gr%C3%A9goire-lorgnier-212550172/?originalSubdomain=fr"
+          >
+            <div class="border h-12 flex flex-row gap-2 p-2 items-center rounded-lg">
+              <img src="icons8-linkedin.svg" class="h-full w-full" />
+              <span class="font-bold">LinkedIn</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="relative w-full max-w-[500px] lg:max-w-[400px] max-h-[100vw] aspect-square cursor-grab">
+          <div id="rendererFrame" class="h-full w-full"></div>
+          <img
+            src="corner-arrow-svgrepo-com.svg"
+            class="absolute top-4 left-4 z-1 fill-whit h-4 w-4"
+          />
+          <img
+            src="corner-arrow-svgrepo-com.svg"
+            class="absolute top-4 right-4 z-1 fill-whit h-4 w-4 rotate-90"
+          />
+          <img
+            src="corner-arrow-svgrepo-com.svg"
+            class="absolute bottom-4 left-4 z-1 fill-whit h-4 w-4 -rotate-90"
+          />
+          <img
+            src="corner-arrow-svgrepo-com.svg"
+            class="absolute bottom-4 right-4 z-1 fill-whit h-4 w-4 rotate-180"
+          />
+        </div>
+
+        <div>
+          <div class="hidden bg-black lg:flex lg:visible lg:mx-auto lg:my-auto w-full text-green-500 whitespace-pre-wrap font-mono flex-row lg:flex-col gap-4 w-full max-w-[300px] lg:rounded-lg">
+            <div
+              id="stateDisplay"
+              class="w-full text-green-500 flex flex-col p-4 rounded-lg text-center text-sm"
+            >
+              <div id="line1" class="flex flex-row items-center">
+                <div class="w-1/4"></div>
+                <div id="up" class="grid grid-cols-3 w-1/4 border p-1"></div>
+                <div id="othersInfo" class="w-1/2 flex">
+                  <div class="border border-green-500 flex flex-col p-2 ml-2 mb-2 right-0 text-sm rounded-lg text-white w-full">
+                    <div class="flex flex-row justify-between">
+                      <span>Resolved:</span>
+                      <span id="isResolved"></span>
+                    </div>
+                    <div class="flex flex-row justify-between">
+                      <span>Moving:</span>
+                      <span id="isMoving"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="line2" class="flex flex-row">
+                <div id="left" class="grid grid-cols-3 w-1/4 border p-1"></div>
+                <div id="front" class="grid grid-cols-3 w-1/4 border p-1"></div>
+                <div id="right" class="grid grid-cols-3 w-1/4 border p-1"></div>
+                <div id="back" class="grid grid-cols-3 w-1/4 border p-1"></div>
+              </div>
+
+              <div id="line3" class="flex flex-row">
+                <div class="w-1/4"></div>
+                <div id="down" class="grid grid-cols-3 w-1/4 border p-1"></div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-black flex flex-row items-center justify-center text-sm my-8 border rounded-lg cursor-pointer w-[300px]">
+            <button
+              id="shuffle"
+              class="p-4 hover:bg-gray-900 rounded-l-lg flex flex-row items-center gap-1 w-1/3 text-center"
+            >
+              <img src="card.svg" class="h-4 w-4" />
+              <span>Shuffle</span>
+            </button>
+            <button
+              id="restart"
+              class="hover:bg-gray-900 w-1/3 justify-center items-center border-x"
+            >
+              <span id="resetWord" class="block h-6">
+                Reset
+              </span>
+              <img
+                id="loader"
+                src="progress_icon.svg"
+                class="h-6 w-6 hidden mx-auto"
+              />
+            </button>
+            <button
+              id="resolved"
+              class="p-4 hover:bg-gray-900 rounded-r-lg flex flex-row items-center gap-1 w-1/3 text-center"
+            >
+              <img src="lightbulb.svg" class="h-4 w-4" />
+              <span> Resolve </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-black hidden lg:flex flex-col gap-4 lg:max-w-[1024px] lg:mx-auto">
+		<h3 class="text-lg font-bold">Rubik's Cube Simulator</h3>
+		<span>
+		  This interactive 3D Rubik's cube simulator demonstrates the power of modern web technologies for creating engaging 
+		  browser-based experiences. Built with <a href="https://threejs.org/" class="underline">Three.js</a>, 
+		  it renders a fully manipulable 3D cube you can rotate, twist, and solve right in your browser.
+		  
+		  The automatic solving feature uses the <a href="https://www.npmjs.com/package/cubejs" class="underline">CubeJS</a> 
+		  library, which implements <a href="https://en.wikipedia.org/wiki/Optimal_solutions_for_the_Rubik%27s_Cube#Kociemba's_algorithm" class="underline">Kociemba's algorithm</a> 
+		  to quickly find efficient (though not necessarily optimal) solutions for any scrambled state.
+		  
+		  Try dragging the cube to rotate it, use the controls to shuffle or solve it automatically, and watch the state display 
+		  track each change in real-time.
+		</span>
+  <div class="flex flex-row justify-between mt-4">
+    <a href="https://github.com/Wuraim/three-js-tuto" class="flex flex-row items-center gap-2 underline">
+      <div class="bg-black rounded-lg p-1">
+        <img src="github-mark-white.svg" class="bg-black h-6 w-6" />
+      </div> 
+      Access the public GitHub repository
+    </a>
+    <span class="ml-auto mr-0 text-gray-400 italic text-sm flex flex-row gap-1">
+      Made by <a href="https://www.gregoirelorgnier.me" class="underline">Grégoire LORGNIER</a>
+    </span>
+  </div>
+      </div>
+    </div>
+
+    <script type="module" src="/main.ts"></script>
+  </body>
+</html>;
+
+
+<style>
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
+	}
+
+	#loader {
+		animation: spin 1s linear infinite;
+	}
+</style>
