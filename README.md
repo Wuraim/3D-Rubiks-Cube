@@ -1,6 +1,8 @@
 ### Rubiks cube
 Test the website here : https://rubikscube.gregoirelorgnier.me/
 
+<img width="772" height="442" alt="image" src="https://github.com/user-attachments/assets/972d0d5b-421f-49ad-b2b0-f5015627ad8c" />
+
 This interactive 3D Rubik's cube simulator demonstrates the power of modern web technologies for creating engaging browser-based experiences. 
 Built with Three.js, it renders a fully manipulable 3D cube you can rotate, twist, and solve right in your browser. 
 
