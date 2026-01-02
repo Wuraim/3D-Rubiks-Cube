@@ -234,60 +234,6 @@ export default class Stage {
 				) === 1;
 
 			result = checkAxisA && checkAxisB && checkPlan && checkMainAxis;
-		} else if (this.allPointedPlanCubie.length === 3) {
-			const checkAxisA =
-				Math.round(
-					this.allPointedPlanCubie[0].cubie.position[axisA]
-				) ===
-					Math.round(
-						this.allPointedPlanCubie[1].cubie.position[axisA]
-					) &&
-				Math.round(
-					this.allPointedPlanCubie[1].cubie.position[axisA]
-				) ===
-					Math.round(
-						this.allPointedPlanCubie[2].cubie.position[axisA]
-					);
-
-			const checkAxisB =
-				Math.round(
-					this.allPointedPlanCubie[0].cubie.position[axisB]
-				) ===
-					Math.round(
-						this.allPointedPlanCubie[1].cubie.position[axisB]
-					) &&
-				Math.round(
-					this.allPointedPlanCubie[1].cubie.position[axisB]
-				) ===
-					Math.round(
-						this.allPointedPlanCubie[2].cubie.position[axisB]
-					);
-
-			const checkPlan =
-				this.allPointedPlanCubie[0].plan ===
-					this.allPointedPlanCubie[1].plan &&
-				this.allPointedPlanCubie[1].plan ===
-					this.allPointedPlanCubie[2].plan;
-
-			const checkMainAxis =
-				Math.round(
-					Math.abs(this.allPointedPlanCubie[0].cubie.position[axis]) +
-						Math.abs(
-							this.allPointedPlanCubie[1].cubie.position[axis]
-						)
-				) === 1 &&
-				Math.round(
-					Math.abs(this.allPointedPlanCubie[1].cubie.position[axis]) +
-						Math.abs(
-							this.allPointedPlanCubie[2].cubie.position[axis]
-						)
-				) === 1 &&
-				Math.round(
-					this.allPointedPlanCubie[0].cubie.position[axis] +
-						this.allPointedPlanCubie[2].cubie.position[axis]
-				) === 0;
-
-			result = checkAxisA && checkAxisB && checkPlan && checkMainAxis;
 		}
 
 		return result;
@@ -313,9 +259,11 @@ export default class Stage {
 		);
 
 		const projected = new Vector3(0, 0, 0);
-		projected[inlineAxis] = Math.round(
-			this.allPointedPlanCubie[2].cubie.position[inlineAxis]
-		);
+		projected[inlineAxis] =
+			-Math.round(
+				this.allPointedPlanCubie[0].cubie.position[inlineAxis]
+			) +
+			Math.round(this.allPointedPlanCubie[1].cubie.position[inlineAxis]);
 
 		const product = new Vector3();
 		product.crossVectors(plan, projected);
@@ -350,17 +298,6 @@ export default class Stage {
 		return result;
 	}
 
-	private isRowCentral(): boolean {
-		return this.allPointedPlanCubie.some(
-			(planCubie) =>
-				Math.round(
-					Math.abs(planCubie.cubie.position.x) +
-						Math.abs(planCubie.cubie.position.y) +
-						Math.abs(planCubie.cubie.position.z)
-				) === 1
-		);
-	}
-
 	private isPlanShared(): boolean {
 		let result = true;
 
@@ -388,11 +325,12 @@ export default class Stage {
 			this.allPointedPlanCubie.push(planCubie);
 
 			if (this.allPointedPlanCubie.length > 1) {
+				debugger;
 				const inlined = this.areInline();
 				const isPlanOk = this.isPlanShared();
 
 				if (inlined && isPlanOk) {
-					if (this.allPointedPlanCubie.length === 3) {
+					if (this.allPointedPlanCubie.length === 2) {
 						const inlineAxis = this.getInlineAxis()!;
 
 						const move = this.getWantedRotation(inlineAxis);
@@ -416,7 +354,7 @@ export default class Stage {
 				}
 			}
 
-			if (this.allPointedPlanCubie.length >= 3) {
+			if (this.allPointedPlanCubie.length >= 2) {
 				this.allPointedPlanCubie = [];
 			}
 		}
