@@ -180,7 +180,7 @@ export default class Stage {
 			if (plan) {
 				result = {
 					cubie: intersects[0].object,
-					plan: this.getPointedPlan(intersects[0])!,
+					plan,
 				};
 			} else {
 				console.error(
@@ -325,7 +325,6 @@ export default class Stage {
 			this.allPointedPlanCubie.push(planCubie);
 
 			if (this.allPointedPlanCubie.length > 1) {
-				debugger;
 				const inlined = this.areInline();
 				const isPlanOk = this.isPlanShared();
 
