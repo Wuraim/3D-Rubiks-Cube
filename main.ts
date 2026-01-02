@@ -41,6 +41,7 @@ function onMouseDown(event: MouseEvent) {
 function onMouseUp(event: MouseEvent) {
 	if (event.button === 0) {
 		stage.enableControl();
+		stage.onReleaseControl();
 	}
 }
 
@@ -60,6 +61,7 @@ window.addEventListener("touchmove", onTouched);
 
 function onTouchEnd() {
 	stage.enableControl();
+	stage.onReleaseControl();
 }
 
 window.addEventListener("touchend", onTouchEnd);

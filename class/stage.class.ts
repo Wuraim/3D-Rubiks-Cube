@@ -381,6 +381,10 @@ export default class Stage {
 		return result;
 	}
 
+	public onReleaseControl(): void {
+		this.allPointedPlanCubie = [];
+	}
+
 	public enableControl(): void {
 		if (this.controls.enabled === false) {
 			this.controls.enabled = true;
@@ -392,6 +396,8 @@ export default class Stage {
 			const pointedCubie = this.getPointedPlanCubie(pointer);
 			if (pointedCubie) {
 				this.addPointedCube(pointedCubie);
+			} else {
+				this.allPointedPlanCubie = [];
 			}
 		}
 	}
