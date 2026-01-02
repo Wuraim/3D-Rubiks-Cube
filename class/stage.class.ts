@@ -389,10 +389,9 @@ export default class Stage {
 
 			if (this.allPointedPlanCubie.length > 1) {
 				const inlined = this.areInline();
-				const isRowOk = !this.isRowCentral();
 				const isPlanOk = this.isPlanShared();
 
-				if (inlined && isRowOk && isPlanOk) {
+				if (inlined && isPlanOk) {
 					if (this.allPointedPlanCubie.length === 3) {
 						const inlineAxis = this.getInlineAxis()!;
 
