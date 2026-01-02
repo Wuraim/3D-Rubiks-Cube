@@ -3,8 +3,26 @@ import "./service/displayState.js";
 import Stage from "./class/stage.class.js";
 
 let pointer = new THREE.Vector2(999, 999);
+const frameContainer = document.querySelector(
+	"#rendererContainer"
+) as HTMLElement | null;
 let frame = document.querySelector("#rendererFrame")!;
+const frameSize = document.querySelector("#frameSize");
 let stage = new Stage(frame, displayLoader, displayReset);
+
+function updateFrameSize(): void {
+	if (frameContainer) {
+		const width = frameContainer.clientWidth;
+		frameContainer.style.height = `${width}px`; // force square on browsers lacking aspect-ratio support
+	}
+
+	const rect = frame.getBoundingClientRect();
+	if (frameSize) {
+		frameSize.textContent = `${Math.round(rect.width)} x ${Math.round(
+			rect.height
+		)}`;
+	}
+}
 
 const onKeyDown = async (event: KeyboardEvent) => {
 	if (event.key === "Enter") {
@@ -85,7 +103,15 @@ async function onClickResolved(): Promise<void> {
 
 window.addEventListener("keydown", (event) => onKeyDown(event));
 
-window.addEventListener("resize", () => stage.resizeRenderer(frame));
+window.addEventListener("load", () => {
+	updateFrameSize();
+	stage.resizeRenderer(frame);
+});
+
+window.addEventListener("resize", () => {
+	updateFrameSize();
+	stage.resizeRenderer(frame);
+});
 
 window.addEventListener("mousedown", onMouseDown);
 

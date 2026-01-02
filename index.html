@@ -32,7 +32,7 @@
             href="https://github.com/Wuraim/three-js-tuto"
           >
             <div class="border h-12 flex flex-row gap-2 p-2 items-center rounded-lg">
-              <img src="github-mark-white.svg" class="h-full w-full" />
+              <img src="github-mark-white.svg" class="h-8 w-8" />
               <span class="font-bold">GitHub</span>
             </div>
           </a>
@@ -42,13 +42,18 @@
             href="https://www.linkedin.com/in/gr%C3%A9goire-lorgnier-212550172/?originalSubdomain=fr"
           >
             <div class="border h-12 flex flex-row gap-2 p-2 items-center rounded-lg">
-              <img src="icons8-linkedin.svg" class="h-full w-full" />
+              <img src="icons8-linkedin.svg" class="h-8 w-8" />
               <span class="font-bold">LinkedIn</span>
             </div>
           </a>
         </div>
 
-        <div class="relative w-full max-w-[500px] lg:max-w-[400px] max-h-[100vw] aspect-square cursor-grab">
+        <!-- Pour des raisons de debugging, j'aurais besoins que tu affiches la taille du frameRendeer ici -->
+        <div class="md:hidden text-xs text-gray-400 font-mono mb-2" aria-live="polite">
+          <span id="frameSize"></span>
+        </div>
+
+        <div id="rendererContainer" class="relative w-full max-w-[500px] lg:max-w-[400px] max-h-[100vw] aspect-square cursor-grab">
           <div id="rendererFrame" class="h-full w-full"></div>
           
           <div class="absolute top-4 left-4 z-1 h-4 w-4 border-t-2 border-l-2"></div>
