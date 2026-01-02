@@ -395,7 +395,7 @@ export default class Stage {
 		if (this.controls.enabled === false) {
 			const pointedCubie = this.getPointedPlanCubie(pointer);
 			if (pointedCubie) {
-				this.addPointedCube(pointedCubie);
+				await this.addPointedCube(pointedCubie);
 			} else {
 				this.allPointedPlanCubie = [];
 			}
