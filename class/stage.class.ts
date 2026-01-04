@@ -260,10 +260,8 @@ export default class Stage {
 
 		const projected = new Vector3(0, 0, 0);
 		projected[inlineAxis] =
-			-Math.round(
-				this.allPointedPlanCubie[0].cubie.position[inlineAxis]
-			) +
-			Math.round(this.allPointedPlanCubie[1].cubie.position[inlineAxis]);
+			Math.round(this.allPointedPlanCubie[1].cubie.position[inlineAxis]) -
+			Math.round(this.allPointedPlanCubie[0].cubie.position[inlineAxis]);
 
 		const product = new Vector3();
 		product.crossVectors(plan, projected);
@@ -312,6 +310,17 @@ export default class Stage {
 		}
 
 		return result;
+	}
+
+	private isRowCentral(): boolean {
+		return this.allPointedPlanCubie.some(
+			(planCubie) =>
+				Math.round(
+					Math.abs(planCubie.cubie.position.x) +
+						Math.abs(planCubie.cubie.position.y) +
+						Math.abs(planCubie.cubie.position.z)
+				) === 1
+		);
 	}
 
 	private async addPointedCube(
